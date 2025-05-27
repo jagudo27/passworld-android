@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PassworldAndroid</string>
+    <string name="no_username">Sin nombre de usuario</string>
+    <string name="all_passwords">Todas mis contraseñas</string>
+    <string name="vault_unlock_title">Desbloquear baúl</string>
+    <string name="vault_unlock_description">Introduce la contraseña maestra para desbloquear el baúl.</string>
+    <string name="vault_unlock_hint">Contraseña maestra</string>
+    <string name="vault_unlock_button">Desbloquear</string>
+    <string name="vault_unlock_error">Error al desbloquear el baúl. Por favor, verifica tu contraseña.</string>
+</resources>

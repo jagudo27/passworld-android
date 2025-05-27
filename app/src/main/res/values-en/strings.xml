@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PassworldAndroid</string>
+    <string name="no_username">No username provided</string>
+    <string name="all_passwords">All my passwords</string>
+    <string name="vault_unlock_title">Unlock Vault</string>
+    <string name="vault_unlock_description">Enter the master password to unlock the vault.</string>
+    <string name="vault_unlock_hint">Master password</string>
+    <string name="vault_unlock_button">Unlock</string>
+    <string name="vault_unlock_error">Error unlocking the vault. Please check your password.</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PassworldAndroid</string>
+    <string name="no_username">Kein Benutzername angegeben</string>
+    <string name="all_passwords">Alle meine Passwörter</string>
+    <string name="vault_unlock_title">Tresor entsperren</string>
+    <string name="vault_unlock_description">Geben Sie das Master-Passwort ein, um den Tresor zu entsperren.</string>
+    <string name="vault_unlock_hint">Master-Passwort</string>
+    <string name="vault_unlock_button">Entsperren</string>
+    <string name="vault_unlock_error">Fehler beim Entsperren des Tresors. Bitte überprüfen Sie Ihr Passwort.</string>
+
+</resources>
