@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "757458993089",
+    "firebase_url": "https://passworld-g4vj4vi-default-rtdb.firebaseio.com",
+    "project_id": "passworld-g4vj4vi",
+    "storage_bucket": "passworld-g4vj4vi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757458993089:android:370ad83bde181896d73940",
+        "android_client_info": {
+          "package_name": "mobile.passworldandroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZT381PMr2GTyNk9rcGPgoi_SGmfCpOl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
