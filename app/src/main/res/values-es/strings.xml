@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PassworldAndroid</string>
     <string name="no_username">Sin nombre de usuario</string>
@@ -8,4 +7,11 @@
     <string name="vault_unlock_hint">Contraseña maestra</string>
     <string name="vault_unlock_button">Desbloquear</string>
     <string name="vault_unlock_error">Error al desbloquear el baúl. Por favor, verifica tu contraseña.</string>
+    <string name="sign_in_title">Iniciar Sesión</string>
+    <string name="sign_in_button">Entrar</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="sign_in_error">Credenciales incorrectas. Inténtalo de nuevo.</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="or_sign_in_with">- - - - O iniciar sesion con - - - -</string>
 </resources>

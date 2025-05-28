@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,7 +25,7 @@ import mobile.passworld.activity.VaultUnlockActivity;
 
 public class SignInActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
-    private Button signInButton;
+    private SignInButton signInButton;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
 
@@ -34,7 +35,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
+        if (auth.getCurrentUser() == null) {
             // Ya logeado
             startActivity(new Intent(this, VaultUnlockActivity.class));
             finish();
@@ -43,9 +44,11 @@ public class SignInActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-        signInButton = findViewById(R.id.signInButton);
+        signInButton = findViewById(R.id.googleSignInButton);
         progressBar = new ProgressBar(this);
         progressBar.setVisibility(View.GONE);
+
+        signInButton.setSize(SignInButton.SIZE_ICON_ONLY);
 
         signInButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
