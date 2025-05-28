@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="48dp"
-        app:layout_constraintWidth_percent="0.9">
+        app:layout_constraintWidth_percent="0.5">
 
         <!-- Logo con tamaño fijo -->
         <ImageView
@@ -81,7 +81,7 @@
         <!-- Unlock Button -->
         <Button
             android:id="@+id/unlockButton"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="#070707"
