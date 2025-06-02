@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_change_language"
+        android:icon="@drawable/language_icon"
+        android:title="@string/menu_changelanguage_text"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_dark_mode"
+        android:icon="@drawable/dark_mode_icon"
+        android:title="@string/menu_darkmode_text"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/logout_icon"
+        android:title="@string/menu_logout_text"
+        android:visible="false"
+        app:showAsAction="never" />
+</menu>
