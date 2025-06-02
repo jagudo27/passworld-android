@@ -1,9 +1,44 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+    <attr name="colorPrimaryText" format="color"/>
+    <attr name="colorSecondaryText" format="color"/>
+    <attr name="colorProtectIcon" format="color"/>
+    <attr name="colorSearchBar" format="color"/>
     <style name="Base.Theme.PassworldAndroid" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="colorOnSurface">#000000</item>
+        <item name="colorPrimaryText">#000000</item>
+        <item name="colorSecondaryText">#575757</item>
+        <item name="colorProtectIcon">#B6B6B6</item>
+        <item name="colorSearchBar">#F0EFEF</item>
+
+
     </style>
 
-    <style name="Theme.PassworldAndroid" parent="Base.Theme.PassworldAndroid" />
+
+    <style name="Theme.PassworldAndroid" parent="Base.Theme.PassworldAndroid">
+        <item name="popupMenuStyle">@style/PopupMenu.PassworldAndroid</item>
+        <item name="popupMenuBackground">@color/white</item>
+    </style>
+
+    <style name="PopupMenu.PassworldAndroid" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+    </style>
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
+    <style name="BlackCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlActivated">@color/black</item>
+    </style>
+
+    <style name="BlackSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint">@color/black</item>
+        <item name="android:secondaryProgressTint">@color/black</item>
+    </style>
 </resources>

@@ -15,4 +15,60 @@
     <string name="sign_in_error">Falsche Anmeldedaten. Bitte versuche es erneut.</string>
     <string name="forgot_password">Passwort vergessen?</string>
     <string name="or_sign_in_with">- - - - Oder anmelden mit - - - -</string>
+    <string name="no_security_issues">Keine Sicherheitsprobleme</string>
+    <string name="weak_password">Schwaches Passwort</string>
+    <string name="duplicate_password">Doppeltes Passwort</string>
+    <string name="compromised_password">Kompromittiertes Passwort</string>
+    <string name="unsafe_url">Unsichere URL</string>
+    <string name="security_issues_detected">Gefundene Probleme:\n%1$s</string>
+    <string name="password_updated">Passwort aktualisiert</string>
+    <string name="error_updating">Fehler beim Aktualisieren: %1$s</string>
+    <string name="error_saving">Fehler beim Speichern: %1$s</string>
+    <string name="password_deleted">Passwort gelöscht</string>
+    <string name="error_deleting">Fehler beim Löschen: %1$s</string>
+
+    <!-- TextInputLayout hints -->
+    <string name="hint_description">Beschreibung</string>
+    <string name="hint_username">Benutzername</string>
+    <string name="hint_url">URL</string>
+    <string name="hint_password">Passwort</string>
+
+    <!-- Default TextInputEditText values -->
+    <string name="default_description">Meine Beschreibung</string>
+    <string name="default_username">meinbenutzer123</string>
+    <string name="default_url">https://beispiel.de</string>
+    <string name="default_password">meinGeheimesPasswort</string>
+
+    <!-- Buttons -->
+    <string name="button_save">Speichern</string>
+    <string name="button_delete">Löschen</string>
+    <string name="button_close">Schließen</string>
+    <string name="search_passwords_bar_text">Passwörter suchen</string>
+    <string name="no_passwords_found">Keine Passwörter gefunden</string>
+
+    <string name="sort_name_asc">Name (A-Z)</string>
+    <string name="sort_name_desc">Name (Z-A)</string>
+    <string name="sort_date_newest">Neueste zuerst</string>
+    <string name="sort_date_oldest">Älteste zuerst</string>
+    <string name="signup_title">Registrierung</string>
+    <string name="confirm_password">Passwort bestätigen</string>
+    <string name="register_button_text">Registrieren</string>
+    <string name="or_sign_up_with">- Registrieren mit -</string>
+    <string name="sign_up_already_have_account">Du hast bereits ein Konto? Anmelden</string>
+    <string name="sign_in_dont_have_account_question">Noch kein Konto? Registrieren</string>
+    <string name="dialog_establish_password_title">Kontopasswort festlegen</string>
+    <string name="dialog_establish_password_desc">Um dich mit Benutzername und Passwort anzumelden, musst du jetzt ein Passwort festlegen.</string>
+    <string name="establish_master_password_title">Master-Passwort festlegen</string>
+    <string name="establish_master_password_desc">Dieses Master-Passwort wird verwendet, um alle deine gespeicherten Passwörter zu verschlüsseln und zu schützen. Es ist sehr wichtig, dass du es nicht vergisst.</string>
+    <string name="masterpassword_hint">Master-Passwort</string>
+    <string name="confirm_master_pass_hint">Master-Passwort bestätigen</string>
+    <string name="menu_changelanguage_text">Sprache ändern</string>
+    <string name="menu_darkmode_text">Dunkelmodus</string>
+    <string name="menu_logout_text">Abmelden</string>
+
+
+    <string name="select_language">Sprache auswählen</string>
+
+
+
 </resources>

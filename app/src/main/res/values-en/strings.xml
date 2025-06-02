@@ -15,4 +15,57 @@
     <string name="sign_in_error">Incorrect credentials. Try again.</string>
     <string name="forgot_password">Forgot your password?</string>
     <string name="or_sign_in_with">- - - - Or sign in with - - - -</string>
+    <string name="no_security_issues">No security issues</string>
+
+    <string name="weak_password">Weak password</string>
+    <string name="duplicate_password">Duplicate password</string>
+    <string name="compromised_password">Compromised password</string>
+    <string name="unsafe_url">Unsafe URL</string>
+    <string name="security_issues_detected">Issues detected:\n%1$s</string>
+    <string name="password_updated">Password updated</string>
+    <string name="error_updating">Error updating: %1$s</string>
+    <string name="error_saving">Error saving: %1$s</string>
+    <string name="password_deleted">Password deleted</string>
+    <string name="error_deleting">Error deleting: %1$s</string>
+
+    <!-- TextInputLayout hints -->
+    <string name="hint_description">Description</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_url">URL</string>
+    <string name="hint_password">Password</string>
+
+    <!-- Default TextInputEditText values -->
+    <string name="default_description">My description</string>
+    <string name="default_username">myuser123</string>
+    <string name="default_url">https://example.com</string>
+    <string name="default_password">mySecretPassword</string>
+
+    <!-- Buttons -->
+    <string name="button_save">Save</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_close">Close</string>
+    <string name="search_passwords_bar_text">Search passwords</string>
+    <string name="no_passwords_found">No passwords found</string>
+
+    <string name="sort_name_asc">Name (A-Z)</string>
+    <string name="sort_name_desc">Name (Z-A)</string>
+    <string name="sort_date_newest">Newest first</string>
+    <string name="sort_date_oldest">Oldest first</string>
+    <string name="signup_title">Sign Up</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register_button_text">Register</string>
+    <string name="or_sign_up_with">- Sign up with -</string>
+    <string name="sign_up_already_have_account">Already have an account? Sign in</string>
+    <string name="sign_in_dont_have_account_question">Don’t have an account? Sign up</string>
+    <string name="dialog_establish_password_title">Set account password</string>
+    <string name="dialog_establish_password_desc">To sign in with your username and password, you need to set a password now.</string>
+    <string name="establish_master_password_title">Set master password</string>
+    <string name="establish_master_password_desc">This master password will be used to encrypt and protect all your stored passwords. It is very important not to forget it.</string>
+    <string name="masterpassword_hint">Master password</string>
+    <string name="confirm_master_pass_hint">Confirm master password</string>
+    <string name="menu_changelanguage_text">Change language</string>
+    <string name="menu_darkmode_text">Dark mode</string>
+    <string name="menu_logout_text">Log out</string>
+    <string name="select_language">Select language</string>
+
 </resources>
