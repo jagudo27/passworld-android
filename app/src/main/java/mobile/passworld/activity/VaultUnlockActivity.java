@@ -58,7 +58,7 @@ public class VaultUnlockActivity extends AppCompatActivity {
                         UserSession.getInstance().setMasterKey(EncryptionUtil.deriveAESKey(inputPassword));
                         goToVault();
                     } else {
-                        showError("Incorrect master password");
+                        showError(getString(string.incorrect_master_password));
                     }
                 } catch (Exception e) {
                     showError("Error verifying password");

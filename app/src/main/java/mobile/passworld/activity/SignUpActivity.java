@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +39,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 import mobile.passworld.R;
 import mobile.passworld.exception.EncryptionException;
@@ -102,17 +105,23 @@ public class SignUpActivity extends AppCompatActivity {
 
             // Validación de campos
             if (TextUtils.isEmpty(email)) {
-                emailEditText.setError("Email requerido");
+                emailEditText.setError(getString(R.string.required_email_field));
+                return;
+            }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEditText.setError(getString(R.string.invalid_email_format));
                 return;
             }
 
+            // Validar campo de contraseña
             if (TextUtils.isEmpty(password)) {
-                passwordEditText.setError("Contraseña requerida");
+                passwordEditText.setError(getString(R.string.required_password_field));
                 return;
             }
 
             if (!password.equals(confirmPassword)) {
-                confirmPasswordEditText.setError("Las contraseñas no coinciden");
+
+                confirmPasswordEditText.setError(getString(R.string.passwords_dont_match));
                 return;
             }
 
@@ -157,7 +166,7 @@ public class SignUpActivity extends AppCompatActivity {
                     } else {
                         // Error al registrar
                         Toast.makeText(SignUpActivity.this,
-                                "Error al registrar: " + task.getException().getMessage(),
+                                "Error al registrar: " + Objects.requireNonNull(task.getException()).getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -314,14 +323,14 @@ public class SignUpActivity extends AppCompatActivity {
             boolean hasError = false;
 
             if (TextUtils.isEmpty(password)) {
-                passwordLayout.setError("La contraseña es obligatoria");
+                passwordLayout.setError(getString(R.string.required_password_field));
                 hasError = true;
             } else {
                 passwordLayout.setError(null);
             }
 
             if (!password.equals(confirm)) {
-                confirmPasswordLayout.setError("Las contraseñas no coinciden");
+                confirmPasswordLayout.setError(getString(R.string.passwords_dont_match));
                 hasError = true;
             } else {
                 confirmPasswordLayout.setError(null);

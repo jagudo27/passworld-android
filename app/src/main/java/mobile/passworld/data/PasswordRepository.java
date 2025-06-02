@@ -1,6 +1,5 @@
 package mobile.passworld.data;
 
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -125,7 +124,7 @@ public class PasswordRepository {
         passwordsRef.addValueEventListener(passwordsListener);
     }
 
-    // Método para detener la escucha (importante durante logout)
+    // detener la escucha (importante durante logout)
     public void removeListeners() {
         if (passwordsListener != null) {
             passwordsRef.removeEventListener(passwordsListener);
@@ -133,65 +132,9 @@ public class PasswordRepository {
         }
     }
 
-    // Método para leer una contraseña por id y devolverla por callback
-    public void getPasswordById(String idFb, final PasswordCallback callback) {
-        SecretKeySpec masterKey = UserSession.getInstance().getMasterKey();
 
-        passwordsRef.child(idFb).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    callback.onPasswordLoaded(null);
-                    return;
-                }
 
-                PasswordDTO dto = new PasswordDTO();
-
-                // ID Firebase (clave)
-                dto.setIdFb(snapshot.getKey());
-
-                // Campos String
-                dto.setDescription(snapshot.child("description").getValue(String.class));
-                dto.setPassword(snapshot.child("password").getValue(String.class));
-                dto.setUrl(snapshot.child("url").getValue(String.class));
-                dto.setUsername(snapshot.child("username").getValue(String.class));
-                dto.setLastModified(snapshot.child("lastModified").getValue(String.class));
-
-                // Campos booleanos
-                Boolean weak = snapshot.child("isWeak").getValue(Boolean.class);
-                dto.setWeak(weak != null && weak);
-
-                Boolean duplicate = snapshot.child("isDuplicate").getValue(Boolean.class);
-                dto.setDuplicate(duplicate != null && duplicate);
-
-                Boolean urlUnsafe = snapshot.child("isUrlUnsafe").getValue(Boolean.class);
-                dto.setUrlUnsafe(urlUnsafe != null && urlUnsafe);
-
-                Boolean compromised = snapshot.child("isCompromised").getValue(Boolean.class);
-                dto.setCompromised(compromised != null && compromised);
-
-                // Desencriptar datos
-                try {
-                    dto.setUrl(EncryptionUtil.decryptData(dto.getUrl(), masterKey));
-                    dto.setUsername(EncryptionUtil.decryptData(dto.getUsername(), masterKey));
-                    dto.setDescription(EncryptionUtil.decryptData(dto.getDescription(), masterKey));
-                    dto.setPassword(EncryptionUtil.decryptData(dto.getPassword(), masterKey));
-                } catch (EncryptionException e) {
-                    LogUtils.LOGGER.severe("Error descifrando contraseña: " + e.getMessage());
-                }
-
-                callback.onPasswordLoaded(dto);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                LogUtils.LOGGER.severe("Error cargando contraseña por id: " + error.getMessage());
-                callback.onError(error);
-            }
-        });
-    }
-
-    // Método para guardar una nueva contraseña
+    // guardar una nueva contraseña
     public void savePassword(PasswordDTO password, OperationCallback callback) {
         try {
             SecretKeySpec masterKey = UserSession.getInstance().getMasterKey();
@@ -300,39 +243,5 @@ public class PasswordRepository {
         for (PasswordDTO password : passwords) {
             SecurityFilterUtils.analyzePasswordSecurity(password);
         }
-    }
-
-    // Método para actualizar la seguridad de todas las contraseñas
-    private void updateAllPasswordsSecurity() {
-        getAllPasswords(new PasswordsCallback() {
-            @Override
-            public void onPasswordsLoaded(List<PasswordDTO> passwords) {
-                SecurityFilterUtils.clearUniquePasswords();
-
-                // Analizar y actualizar cada contraseña
-                for (PasswordDTO password : passwords) {
-                    SecurityFilterUtils.analyzePasswordSecurity(password);
-
-                    // Actualizar en Firebase sin callback (operación silenciosa)
-                    try {
-                        Map<String, Object> updates = new HashMap<>();
-                        updates.put("isWeak", password.isWeak());
-                        updates.put("isDuplicate", password.isDuplicate());
-                        updates.put("isCompromised", password.isCompromised());
-                        updates.put("isUrlUnsafe", password.isUrlUnsafe());
-
-                        passwordsRef.child(password.getIdFb())
-                                .updateChildren(updates);
-                    } catch (Exception e) {
-                        LogUtils.LOGGER.severe("Error actualizando seguridad de contraseña: " + e.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onError(DatabaseError error) {
-                LogUtils.LOGGER.severe("Error actualizando seguridad de contraseñas: " + error.getMessage());
-            }
-        });
     }
 }

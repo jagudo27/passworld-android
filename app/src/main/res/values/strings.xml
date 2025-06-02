@@ -88,5 +88,13 @@
     <string name="helper_required">Obligatorio</string>
     <string name="helper_optional">Opcional</string>
     <string name="button_cancel">Cancelar</string>
+    <string name="required_field">Campo requerido</string>
+    <string name="required_email_field">Correo requerido</string>
+    <string name="required_password_field">Contraseña requerida</string>
+    <string name="required_master_password_field">Contraseña maestra requerida</string>ç
+    <string name="invalid_email_format">Correo electronico inválido</string>
+    <string name="passwords_dont_match">Las contraseñas no coinciden</string>
+    <string name="incorrect_master_password">Contraseña maestra incorrecta</string>
+
 
 </resources>

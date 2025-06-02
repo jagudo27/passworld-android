@@ -3,6 +3,7 @@ package mobile.passworld.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.Objects;
 
 import mobile.passworld.R;
 import mobile.passworld.session.UserSession;
@@ -69,12 +72,19 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
+            // Validar campo de email
             if (TextUtils.isEmpty(email)) {
-                emailEditText.setError("Correo requerido");
+                emailEditText.setError(getString(R.string.required_email_field));
                 return;
             }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEditText.setError(getString(R.string.invalid_email_format));
+                return;
+            }
+
+            // Validar campo de contraseña
             if (TextUtils.isEmpty(password)) {
-                passwordEditText.setError("Contraseña requerida");
+                passwordEditText.setError(getString(R.string.required_password_field));
                 return;
             }
             progressBar.setVisibility(View.VISIBLE);
@@ -119,7 +129,7 @@ public class SignInActivity extends AppCompatActivity {
         auth.signInWithCredential(googleCredential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        String userId = auth.getCurrentUser().getUid();
+                        String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
                         UserSession.getInstance().setUserId(userId);
 
                         // Ir directamente a la actividad de desbloqueo

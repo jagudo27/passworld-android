@@ -123,16 +123,21 @@ public class SavePasswordDialogFragment extends DialogFragment {
         String url = dialogUrl.getText().toString().trim();
         String password = dialogPassword.getText().toString();
 
-        // Validar la descripción (obligatoria)
+        // Validar descripción
         if (description.isEmpty()) {
+            dialogDescription.setError(getString(R.string.required_field);
+            dialogDescription.requestFocus();
+            return;
+        }
+        if (password.isEmpty()) {
+            dialogPassword.setError(getString(R.string.required_field));
+            dialogPassword.requestFocus();
             return;
         }
 
-        // Solo crear el DTO básico sin analizar
         PasswordDTO passwordDTO = new PasswordDTO(description, username, url, password);
         passwordDTO.setLastModifiedToNow();
 
-        // El análisis se hará en la actividad
         if (listener != null) {
             listener.onPasswordSave(passwordDTO);
         }

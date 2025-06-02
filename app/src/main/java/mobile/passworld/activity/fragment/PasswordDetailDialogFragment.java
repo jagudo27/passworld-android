@@ -215,6 +215,16 @@ public class PasswordDetailDialogFragment extends DialogFragment {
             String newUsername = usernameField.getText().toString();
             String newUrl = urlField.getText().toString();
             String newPassword = passwordField.getText().toString();
+            if (newDescription.isEmpty()) {
+                descriptionField.setError(getString(R.string.required_field);
+                descriptionField.requestFocus();
+                return;
+            }
+            if (newPassword.isEmpty()) {
+                passwordField.setError(getString(R.string.required_field));
+                passwordField.requestFocus();
+                return;
+            }
 
             password.setDescription(newDescription);
             password.setUsername(newUsername);

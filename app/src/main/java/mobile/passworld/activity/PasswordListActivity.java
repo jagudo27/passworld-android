@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
@@ -213,7 +212,7 @@ public class PasswordListActivity extends AppCompatActivity {
     }
 
     private void sortPasswordsByName(boolean ascending) {
-        Collections.sort(filteredPasswords, (p1, p2) -> {
+        filteredPasswords.sort((p1, p2) -> {
             int result = p1.getDescription().compareToIgnoreCase(p2.getDescription());
             return ascending ? result : -result;
         });
@@ -221,7 +220,7 @@ public class PasswordListActivity extends AppCompatActivity {
     }
 
     private void sortPasswordsByDate(boolean newestFirst) {
-        Collections.sort(filteredPasswords, (p1, p2) -> {
+        filteredPasswords.sort((p1, p2) -> {
             // Obtener LocalDateTime de cada contraseña
             LocalDateTime date1 = p1.getLastModifiedAsDate(); // Usa el método existente con 'l' minúscula
             LocalDateTime date2 = p2.getLastModifiedAsDate();
@@ -241,7 +240,7 @@ public class PasswordListActivity extends AppCompatActivity {
     }
 
     private void sortPasswordsBySecurity(boolean mostVulnerableFirst) {
-        Collections.sort(filteredPasswords, (p1, p2) -> {
+        filteredPasswords.sort((p1, p2) -> {
             int p1Issues = getSecurityScore(p1);
             int p2Issues = getSecurityScore(p2);
             return mostVulnerableFirst ? p2Issues - p1Issues : p1Issues - p2Issues;
@@ -263,7 +262,7 @@ public class PasswordListActivity extends AppCompatActivity {
 
         // Mostrar mensaje cuando no hay resultados
         if (filteredPasswords.isEmpty()) {
-            emptyView.setText("No se encontraron contraseñas");
+            emptyView.setText(R.string.no_passwords_found);
             emptyView.setVisibility(View.VISIBLE);
             passwordRecyclerView.setVisibility(View.GONE);
         } else {
