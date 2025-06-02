@@ -13,7 +13,12 @@
           "package_name": "mobile.passworld"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "757458993089-q9d53gkrrvo412h3opl7n4249jp7on13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAZT381PMr2GTyNk9rcGPgoi_SGmfCpOl8"
@@ -21,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757458993089-q9d53gkrrvo412h3opl7n4249jp7on13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

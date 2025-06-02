@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colores base -->
+    <color name="black">#121212</color>
+    <color name="white">#E0E0E0</color>
+
+    <!-- Colores principales de la app -->
+    <color name="colorPrimary">#BB86FC</color>
+    <color name="colorPrimaryDark">#9A67EA</color>
+    <color name="colorAccent">#03DAC6</color>
+
+    <!-- Colores de texto -->
+    <color name="primaryText">#E0E0E0</color>
+    <color name="secondaryText">#A0A0A0</color>
+
+    <!-- Colores de componentes -->
+    <color name="colorSurface">#1E1E1E</color>
+    <color name="colorOnSurface">#DADADA</color>
+    <color name="protectIcon">#8E8E8E</color>
+    <color name="searchBarBackground">#2D2D2D</color>
+    <color name="boxFieldBackground">#333333</color>
+
+    <!-- Colores de elementos UI -->
+    <color name="cardBackground">#262626</color>
+    <color name="buttonBackground">#383838</color>
+    <color name="buttonText">#E0E0E0</color>
+    <color name="buttonIconTint">#E0E0E0</color>
+    <color name="buttontextColor">#E0E0E0</color>
+    <color name="iconTint">#BBBBBB</color>
+    <color name="divider">#3A3A3A</color>
+    <color name="dialogBackground">#262626</color>
+
+    <!-- Colores de FORTALEZA -->
+    <string name="very_weak">Muy débil</string>
+    <string name="weak">Débil</string>
+    <string name="medium">Media</string>
+    <string name="strong">Fuerte</string>
+    <string name="very_strong">Muy fuerte</string>
+</resources>

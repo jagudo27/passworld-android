@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="container_width_percent">0.85</dimen>
+    <dimen name="container_margin_top">48dp</dimen>
+</resources>

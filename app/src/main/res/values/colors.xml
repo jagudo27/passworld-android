@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores base -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Colores principales de la app -->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#A8C7FA</color>
+
+    <!-- Colores de texto -->
+    <color name="primaryText">#000000</color>
+    <color name="secondaryText">#575757</color>
+
+    <!-- Colores de componentes -->
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnSurface">#000000</color>
+    <color name="protectIcon">#B6B6B6</color>
+    <color name="searchBarBackground">#F0EFEF</color>
+    <color name="boxFieldBackground">#FAFAFA</color>
+
+
+    <!-- Colores de elementos UI -->
+    <color name="cardBackground">#FFFFFF</color>
+    <color name="buttonBackground">#000000</color>
+    <color name="buttonText">#FFFFFF</color>
+    <color name="buttonIconTint">#FFFFFF</color>
+    <color name="buttontextColor">#FFFFFF</color>
+    <color name="iconTint">#666666</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="dialogBackground">#FFFFFF</color>
+
+    <!-- Colores de FORTALEZA -->
+    <color name="strengthWeak">#F44336</color>
+    <color name="strengthModerate">#FF9800</color>
+    <color name="strengthGood">#4CAF50</color>
+    <color name="strengthStrong">#2196F3</color>
+
 </resources>
