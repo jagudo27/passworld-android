@@ -1,8 +1,10 @@
 package mobile.passworld.data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class PasswordDTO {
+public class PasswordDTO implements Serializable {
     private int id;
     private String idFb;
     private String description;
@@ -39,8 +41,35 @@ public class PasswordDTO {
 
     // Agregar getter y setter para createdAt
 
-    public void setLastModified(String createdAt) {
-        this.lastModified = createdAt;
+    // Getter normal para lastModified
+    public String getLastModified() {
+        return lastModified;
+    }
+
+    // Setter normal
+    public void setLastModified(String lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    // Método auxiliar para obtener como LocalDateTime
+    public LocalDateTime getLastModifiedAsDate() {
+        if (lastModified == null || lastModified.isEmpty()) {
+            return null;
+        }
+        try {
+            // Usar DateTimeFormatter.ISO_DATE_TIME para manejar el formato con nanosegundos
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            return LocalDateTime.parse(lastModified, formatter);
+        } catch (Exception e) {
+            return null; // En caso de error en el parseo
+        }
+    }
+
+    // Método para establecer la fecha actual como lastModified
+    public void setLastModifiedToNow() {
+        // Formato ISO que incluye nanosegundos como en el ejemplo: 2025-05-04T20:07:33.205865100
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        this.lastModified = LocalDateTime.now().format(formatter);
     }
 
     public String getIdFb() {
@@ -126,12 +155,7 @@ public class PasswordDTO {
     public void setSynced(boolean synced){
         isSynced = synced;
     }
-    public LocalDateTime getlastModified() {
-        if (lastModified == null || lastModified.isEmpty()) {
-            return null;
-        }
-        return LocalDateTime.parse(lastModified);
-    }
+
     @Override
     //toString solo password e id
     public String toString() {
@@ -142,6 +166,11 @@ public class PasswordDTO {
                 ", username='" + username + '\'' +
                 ", url='" + url + '\'' +
                 ", password='" + password + '\'' +
+                ", isWeak=" + isWeak +
+                ", isDuplicate=" + isDuplicate +
+                ", isCompromised=" + isCompromised +
+                ", isUrlUnsafe=" + isUrlUnsafe +
+                ", lastModified='" + lastModified + '\'' +
                 '}';
     }
 
