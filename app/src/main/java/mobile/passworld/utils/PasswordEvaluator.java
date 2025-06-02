@@ -1,6 +1,7 @@
 package mobile.passworld.utils;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -10,6 +11,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import mobile.passworld.R;
 
 public class PasswordEvaluator {
 
@@ -117,38 +120,50 @@ public class PasswordEvaluator {
     }
 
     // Método para actualizar la interfaz de usuario con la información de fortaleza
-    public static void updatePasswordStrengthInfo(int strength, TextView passwordStrengthLabel, ProgressBar passwordStrengthProgressBar) {
-        passwordStrengthProgressBar.setProgress(strength + 1);
+    public static void updatePasswordStrengthInfo(int strength, TextView passwordStrengthLabel, ProgressBar passwordStrengthBar) {
+        // Mapear la fortaleza a porcentajes
+        int progressPercentage;
+        int colorRes;
 
         switch (strength) {
-            case 0:
-                passwordStrengthLabel.setText("Muy débil");
-                passwordStrengthLabel.setTextColor(Color.RED);
-                passwordStrengthProgressBar.setProgressDrawable(passwordStrengthProgressBar.getContext().getResources().getDrawable(android.R.drawable.progress_horizontal, null));
+            case 0: // Muy débil
+                passwordStrengthLabel.setText(R.string.very_weak);
+                progressPercentage = 10;
+                colorRes = Color.RED; // Asegúrate de tener este color
                 break;
-            case 1:
-                passwordStrengthLabel.setText("Débil");
-                passwordStrengthLabel.setTextColor(Color.rgb(255, 165, 0)); // Naranja
-                passwordStrengthProgressBar.setProgressDrawable(passwordStrengthProgressBar.getContext().getResources().getDrawable(android.R.drawable.progress_horizontal, null));
+            case 1: // Débil
+                passwordStrengthLabel.setText(R.string.weak);
+                progressPercentage = 25;
+                colorRes = R.color.strengthWeak;
                 break;
-            case 2:
-                passwordStrengthLabel.setText("Media");
-                passwordStrengthLabel.setTextColor(Color.YELLOW);
-                passwordStrengthProgressBar.setProgressDrawable(passwordStrengthProgressBar.getContext().getResources().getDrawable(android.R.drawable.progress_horizontal, null));
+            case 2: // Media
+                passwordStrengthLabel.setText(R.string.medium);
+                progressPercentage = 50;
+                colorRes = R.color.strengthModerate;
                 break;
-            case 3:
-                passwordStrengthLabel.setText("Fuerte");
-                passwordStrengthLabel.setTextColor(Color.rgb(154, 205, 50)); // YellowGreen
-                passwordStrengthProgressBar.setProgressDrawable(passwordStrengthProgressBar.getContext().getResources().getDrawable(android.R.drawable.progress_horizontal, null));
+            case 3: // Fuerte
+                passwordStrengthLabel.setText(R.string.strong);
+                progressPercentage = 75;
+                colorRes = R.color.strengthGood;
                 break;
-            case 4:
-                passwordStrengthLabel.setText("Muy fuerte");
-                passwordStrengthLabel.setTextColor(Color.GREEN);
-                passwordStrengthProgressBar.setProgressDrawable(passwordStrengthProgressBar.getContext().getResources().getDrawable(android.R.drawable.progress_horizontal, null));
+            case 4: // Muy fuerte
+                passwordStrengthLabel.setText(R.string.very_strong);
+                progressPercentage = 100;
+                colorRes = R.color.strengthStrong;
                 break;
+            default:
+                progressPercentage = 0;
+                colorRes = android.R.color.darker_gray;
         }
 
-        passwordStrengthProgressBar.setVisibility(View.VISIBLE);
+        // Establecer el progreso con el porcentaje calculado
+        passwordStrengthBar.setProgress(progressPercentage);
+
+
+
+
+        // Hacer visibles los elementos
+        passwordStrengthBar.setVisibility(View.VISIBLE);
         passwordStrengthLabel.setVisibility(View.VISIBLE);
     }
 
