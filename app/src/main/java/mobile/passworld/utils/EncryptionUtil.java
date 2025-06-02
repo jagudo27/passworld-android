@@ -3,12 +3,14 @@ package mobile.passworld.utils;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 import mobile.passworld.exception.EncryptionException;
@@ -16,14 +18,15 @@ import mobile.passworld.session.UserSession;
 
 public class EncryptionUtil {
 
-    private static final String ALGORITHM = "AES";
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA256";
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
-    
+
     private static byte[] getSalt() {
         return UserSession.getInstance().getUserId().getBytes(); // Usar el UID del usuario como sal
     }
+
     // === HASHING AND VERIFICATION ===
     public static String hashMasterPassword(String masterPassword) throws EncryptionException {
         try {
@@ -50,7 +53,7 @@ public class EncryptionUtil {
             PBEKeySpec spec = new PBEKeySpec(masterPassword.toCharArray(), getSalt(), ITERATIONS, KEY_LENGTH);
             SecretKeyFactory factory = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
             byte[] derivedKey = factory.generateSecret(spec).getEncoded();
-            return new SecretKeySpec(derivedKey, ALGORITHM);
+            return new SecretKeySpec(derivedKey, "AES");
         } catch (Exception e) {
             throw new EncryptionException("Error deriving AES key", e);
         }
@@ -64,9 +67,20 @@ public class EncryptionUtil {
 
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, masterKey);
-            byte[] encrypted = cipher.doFinal(plainPassword.getBytes());
-            return Base64.getEncoder().encodeToString(encrypted);
+            byte[] iv = new byte[16];
+            SecureRandom random = new SecureRandom();
+            random.nextBytes(iv);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+            cipher.init(Cipher.ENCRYPT_MODE, masterKey, ivSpec);
+
+            byte[] encrypted = cipher.doFinal(plainPassword.getBytes(StandardCharsets.UTF_8));
+
+            // Concatenamos IV + cifrado y codificamos en Base64
+            byte[] combined = new byte[iv.length + encrypted.length];
+            System.arraycopy(iv, 0, combined, 0, iv.length);
+            System.arraycopy(encrypted, 0, combined, iv.length, encrypted.length);
+
+            return Base64.getEncoder().encodeToString(combined);
         } catch (Exception e) {
             throw new EncryptionException("Error encrypting data", e);
         }
@@ -76,16 +90,26 @@ public class EncryptionUtil {
         if (encryptedPassword == null || masterKey == null || encryptedPassword.equals("null") ) {
             return null;
         }
+
         Log.d("EncryptionUtil", "UID: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
         Log.d("EncryptionUtil", "Master Key: " + Base64.getEncoder().encodeToString(masterKey.getEncoded()));
 
         try {
+            byte[] combined = Base64.getDecoder().decode(encryptedPassword);
+            byte[] iv = new byte[16];
+            byte[] encryptedBytes = new byte[combined.length - 16];
+
+            System.arraycopy(combined, 0, iv, 0, 16);
+            System.arraycopy(combined, 16, encryptedBytes, 0, encryptedBytes.length);
+
             Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, masterKey);
-            byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encryptedPassword));
-            return new String(decrypted);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+            cipher.init(Cipher.DECRYPT_MODE, masterKey, ivSpec);
+
+            byte[] decrypted = cipher.doFinal(encryptedBytes);
+            return new String(decrypted, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            throw new EncryptionException("Error decrypting data" + e.getMessage(), e);
+            throw new EncryptionException("Error decrypting data: " + e.getMessage(), e);
         }
     }
 }
