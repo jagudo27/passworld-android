@@ -67,8 +67,8 @@ public class PasswordDTO implements Serializable {
 
     // Método para establecer la fecha actual como lastModified
     public void setLastModifiedToNow() {
-        // Formato ISO que incluye nanosegundos como en el ejemplo: 2025-05-04T20:07:33.205865100
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        // Crear un formateador personalizado que coincida exactamente con el formato deseado
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         this.lastModified = LocalDateTime.now().format(formatter);
     }
 
