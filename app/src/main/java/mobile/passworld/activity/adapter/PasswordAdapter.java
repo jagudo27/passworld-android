@@ -3,6 +3,7 @@ package mobile.passworld.activity.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,13 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
             holder.username.setText(dto.getUsername());
         }
 
+        // Controla la visibilidad del icono de advertencia
+        if (dto.isCompromised() || dto.isWeak() || dto.isDuplicate() || dto.isUrlUnsafe()) {
+            holder.securityWarningIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.securityWarningIcon.setVisibility(View.GONE);
+        }
+
         // Asignamos el click listener al item completo
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -67,11 +75,13 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView desc, username;
+        ImageView securityWarningIcon;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             desc = itemView.findViewById(R.id.password_desc);
             username = itemView.findViewById(R.id.password_username);
+            securityWarningIcon = itemView.findViewById(R.id.security_warning_icon);
         }
     }
 }
