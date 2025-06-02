@@ -16,11 +16,11 @@ public class UserRepository {
         void onFailure(Exception e);
     }
 
-    public void getMasterPassword(MasterPasswordCallback callback) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid(); // Asegúrate de que devuelve el UID correctamente
+    public static void getMasterPassword(MasterPasswordCallback callback) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("users") // Asegúrate que este sea el nombre correcto del nodo
+                .getReference("users")
                 .child(userId)
                 .child("masterPassword");
 
