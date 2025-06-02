@@ -195,7 +195,7 @@ public class PasswordDetailDialogFragment extends DialogFragment {
         boolean isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
         if (hasIssues) {
-            securityText.setText(getString(R.string.security_issues_detected, issues.toString().trim()));
+            securityText.setText(issues.toString().trim());
             // Seleccionar icono de advertencia según el modo
             securityIcon.setImageResource(isDarkMode ?
                     R.drawable.warning_icon : R.drawable.warning_icon);
