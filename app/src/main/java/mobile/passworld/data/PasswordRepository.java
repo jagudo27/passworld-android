@@ -11,8 +11,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -206,9 +204,6 @@ public class PasswordRepository {
                 password.setIdFb(passwordsRef.push().getKey());
             }
 
-            // Actualizar fecha de modificación
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            password.setLastModified(LocalDateTime.now().format(formatter));
 
             // Crear mapa con datos cifrados
             Map<String, Object> updates = new HashMap<>();
