@@ -22,6 +22,12 @@
             android:name=".activity.SignInActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GeneratePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
