@@ -8,6 +8,8 @@
     <color name="colorPrimary">#BB86FC</color>
     <color name="colorPrimaryDark">#9A67EA</color>
     <color name="colorAccent">#03DAC6</color>
+    <color name="statusBarColor">#121212</color>
+    <color name="navigationBarColor">#121212</color>
 
     <!-- Colores de texto -->
     <color name="primaryText">#E0E0E0</color>
@@ -21,8 +23,8 @@
     <color name="boxFieldBackground">#333333</color>
 
     <!-- Colores de elementos UI -->
-    <color name="cardBackground">#262626</color>
-    <color name="buttonBackground">#383838</color>
+    <color name="cardBackground">#333333</color>
+    <color name="buttonBackground">#2E2E2E</color>
     <color name="buttonText">#E0E0E0</color>
     <color name="buttonIconTint">#E0E0E0</color>
     <color name="buttontextColor">#E0E0E0</color>

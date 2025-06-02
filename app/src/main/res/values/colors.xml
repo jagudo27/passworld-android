@@ -8,6 +8,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#A8C7FA</color>
+    <color name="statusBarColor">@color/white</color>
+    <color name="navigationBarColor">@color/white</color>
 
     <!-- Colores de texto -->
     <color name="primaryText">#000000</color>
@@ -22,9 +24,10 @@
 
 
     <!-- Colores de elementos UI -->
-    <color name="cardBackground">#FFFFFF</color>
+    <color name="cardBackground">#F8F8F8</color>
     <color name="buttonBackground">#000000</color>
     <color name="buttonText">#FFFFFF</color>
+
     <color name="buttonIconTint">#FFFFFF</color>
     <color name="buttontextColor">#FFFFFF</color>
     <color name="iconTint">#666666</color>

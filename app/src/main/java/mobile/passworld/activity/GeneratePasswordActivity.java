@@ -36,7 +36,6 @@ import mobile.passworld.utils.SecurityFilterUtils;
 public class GeneratePasswordActivity extends AppCompatActivity {
 
     private TextView generatedPasswordText;
-    private TextView passwordStrengthLabel;
     private TextView strengthIndicatorText;
     private ProgressBar passwordStrengthBar;
     private CheckBox upperLowerCaseCheckbox;
@@ -50,6 +49,8 @@ public class GeneratePasswordActivity extends AppCompatActivity {
     private ImageButton btnBack;
 
     private PasswordRepository passwordRepository = new PasswordRepository();
+
+    private static final String TAG = "GeneratePasswordDebug";
 
     // Constantes para la generación de contraseñas
     private static final String UPPERCASE = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
@@ -74,7 +75,6 @@ public class GeneratePasswordActivity extends AppCompatActivity {
 
     private void initViews() {
         generatedPasswordText = findViewById(R.id.generatedPasswordText);
-        passwordStrengthLabel = findViewById(R.id.passwordStrengthLabel);
         strengthIndicatorText = findViewById(R.id.strengthIndicatorText);
         passwordStrengthBar = findViewById(R.id.passwordStrengthBar);
         upperLowerCaseCheckbox = findViewById(R.id.upperLowerCaseCheckbox);
@@ -85,15 +85,12 @@ public class GeneratePasswordActivity extends AppCompatActivity {
         generateButton = findViewById(R.id.generateButton);
         saveButton = findViewById(R.id.saveButton);
         copyPasswordButton = findViewById(R.id.copyPasswordButton);
-        btnBack = findViewById(R.id.btnBack);
 
         // Configurar valor inicial de la etiqueta de longitud
         updateLengthLabel(lengthSeekBar.getProgress());
     }
 
     private void setupListeners() {
-        // Botón de retroceso
-        btnBack.setOnClickListener(v -> finish());
 
         // Botón generar contraseña
         generateButton.setOnClickListener(v -> generatePassword());
@@ -134,7 +131,7 @@ public class GeneratePasswordActivity extends AppCompatActivity {
 
         // Actualizar indicador de fortaleza usando PasswordEvaluator
         int strength = PasswordEvaluator.calculateStrength(password);
-        PasswordEvaluator.updatePasswordStrengthInfo(strength, passwordStrengthLabel, passwordStrengthBar);
+        PasswordEvaluator.updatePasswordStrengthInfo(strength, strengthIndicatorText, passwordStrengthBar);
 
         // Actualizar el texto del indicador adicional de fortaleza
         updateStrengthIndicatorText(strength);
@@ -172,7 +169,7 @@ public class GeneratePasswordActivity extends AppCompatActivity {
                 break;
         }
 
-        strengthIndicatorText.setText(getString(R.string.password_strength) + ": " + strengthText);
+        strengthIndicatorText.setText(strengthText);
         int color = ContextCompat.getColor(this, colorRes);
         passwordStrengthBar.setProgressTintList(ColorStateList.valueOf(color));
     }
@@ -240,40 +237,73 @@ public class GeneratePasswordActivity extends AppCompatActivity {
 
     // Método para generar la contraseña
     private String generatePasswordString(boolean upperAndLowerCase, boolean numbers, boolean specialChars, int length) {
-        String characterPool = LOWERCASE;  // Contiene minúsculas por defecto
+        StringBuilder characterPool = new StringBuilder();
         List<Character> passwordChars = new ArrayList<>();
-
         SecureRandom random = new SecureRandom();
+        int mandatoryCharsCount = 0;
 
-        // Agrega al menos un carácter de cada tipo requerido
+        Log.d(TAG, "Generando contraseña con:");
+        Log.d(TAG, "Mayúsculas y minúsculas: " + upperAndLowerCase);
+        Log.d(TAG, "Números: " + numbers);
+        Log.d(TAG, "Símbolos: " + specialChars);
+        Log.d(TAG, "Longitud solicitada: " + length);
+
         if (upperAndLowerCase) {
-            passwordChars.add(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
-            characterPool += UPPERCASE;
-            passwordChars.add(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
+            characterPool.append(LOWERCASE).append(UPPERCASE);
+            char lower = LOWERCASE.charAt(random.nextInt(LOWERCASE.length()));
+            char upper = UPPERCASE.charAt(random.nextInt(UPPERCASE.length()));
+            passwordChars.add(lower);
+            passwordChars.add(upper);
+            mandatoryCharsCount += 2;
+            Log.d(TAG, "Añadido obligatorio: " + lower + ", " + upper);
         }
+
         if (numbers) {
-            characterPool += NUMBERS;
-            passwordChars.add(NUMBERS.charAt(random.nextInt(NUMBERS.length())));
+            characterPool.append(NUMBERS);
+            char num = NUMBERS.charAt(random.nextInt(NUMBERS.length()));
+            passwordChars.add(num);
+            mandatoryCharsCount += 1;
+            Log.d(TAG, "Añadido obligatorio: " + num);
         }
+
         if (specialChars) {
-            characterPool += SPECIAL_CHARACTERS;
-            passwordChars.add(SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length())));
+            characterPool.append(SPECIAL_CHARACTERS);
+            char symbol = SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length()));
+            passwordChars.add(symbol);
+            mandatoryCharsCount += 1;
+            Log.d(TAG, "Añadido obligatorio: " + symbol);
         }
 
-        // Completar la contraseña hasta la longitud especificada
+        // Fallback
+        if (characterPool.length() == 0) {
+            characterPool.append(LOWERCASE);
+            char fallbackChar = LOWERCASE.charAt(random.nextInt(LOWERCASE.length()));
+            passwordChars.add(fallbackChar);
+            mandatoryCharsCount = 1;
+            Log.d(TAG, "Ninguna opción seleccionada. Usando minúsculas por defecto. Añadido: " + fallbackChar);
+        }
+
+        if (length < mandatoryCharsCount) {
+            Log.d(TAG, "Longitud menor que los caracteres obligatorios. Ajustando longitud de " + length + " a " + mandatoryCharsCount);
+            length = mandatoryCharsCount;
+        }
+
+        // Completar la contraseña
         for (int i = passwordChars.size(); i < length; i++) {
-            passwordChars.add(characterPool.charAt(random.nextInt(characterPool.length())));
+            char c = characterPool.charAt(random.nextInt(characterPool.length()));
+            passwordChars.add(c);
         }
 
-        // Mezcla aleatoria de caracteres para evitar patrones predecibles
         Collections.shuffle(passwordChars);
 
-        // Construir la contraseña final
         StringBuilder password = new StringBuilder();
         for (Character c : passwordChars) {
             password.append(c);
         }
 
+        Log.d(TAG, "Contraseña generada: " + password.toString());
         return password.toString();
     }
+
+
 }
