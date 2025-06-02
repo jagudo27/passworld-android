@@ -24,11 +24,11 @@
         <!-- Logo con tamaño fijo -->
         <ImageView
             android:id="@+id/logoImageView"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:contentDescription="@string/app_name"
-            android:scaleType="fitCenter"
+            android:layout_width="197dp"
+            android:layout_height="106dp"
             android:layout_marginBottom="16dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/passworld_logo" />
 
         <!-- Title -->
@@ -89,7 +89,8 @@
             android:text="@string/vault_unlock_button"
             android:textColor="@android:color/white"
             android:textColorLink="#020202"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:cornerRadius="10dp" />
 
     </LinearLayout>
 
