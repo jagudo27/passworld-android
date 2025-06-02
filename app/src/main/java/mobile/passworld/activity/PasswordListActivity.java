@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class PasswordListActivity extends AppCompatActivity {
     private List<PasswordDTO> allPasswords = new ArrayList<>();
     private List<PasswordDTO> filteredPasswords = new ArrayList<>();
 
-    private MaterialCardView generatePasswordButton;
+    private FloatingActionButton generatePasswordButton;
     private static final int REQUEST_GENERATE_PASSWORD = 101;
 
     @Override
