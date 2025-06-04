@@ -7,16 +7,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 import mobile.passworld.R;
 import mobile.passworld.data.PasswordDTO;
 
-public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHolder> {
-    private List<PasswordDTO> passwords = new ArrayList<>();
+public class PasswordAdapter extends ListAdapter<PasswordDTO, PasswordAdapter.ViewHolder> {
 
     // Listener para clicks en items
     public interface OnItemClickListener {
@@ -25,19 +25,14 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
 
     private OnItemClickListener listener;
 
+    // Constructor que recibe el DiffCallback
+    public PasswordAdapter() {
+        super(new PasswordDiffCallback());
+    }
+
     // Método para asignar listener
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
-    }
-
-    public void setPasswords(List<PasswordDTO> list) {
-        passwords = list;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemCount() {
-        return passwords.size();
     }
 
     @NonNull
@@ -50,7 +45,7 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PasswordDTO dto = passwords.get(position);
+        PasswordDTO dto = getItem(position);
         holder.desc.setText(dto.getDescription());
         if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
             holder.username.setText(R.string.no_username);
@@ -82,6 +77,30 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
             desc = itemView.findViewById(R.id.password_desc);
             username = itemView.findViewById(R.id.password_username);
             securityWarningIcon = itemView.findViewById(R.id.security_warning_icon);
+        }
+    }
+
+    // DiffCallback como clase estática
+    private static class PasswordDiffCallback extends DiffUtil.ItemCallback<PasswordDTO> {
+        @Override
+        public boolean areItemsTheSame(@NonNull PasswordDTO oldItem, @NonNull PasswordDTO newItem) {
+            // Comprueba si son el mismo elemento por identidad
+            // Usa el identificador único de tus PasswordDTO
+            return oldItem.getIdFb().equals(newItem.getIdFb());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull PasswordDTO oldItem, @NonNull PasswordDTO newItem) {
+            // Comprueba si el contenido es igual
+            return Objects.equals(oldItem.getDescription(), newItem.getDescription()) &&
+                    Objects.equals(oldItem.getUsername(), newItem.getUsername()) &&
+                    Objects.equals(oldItem.getUrl(), newItem.getUrl()) &&
+                    Objects.equals(oldItem.getPassword(), newItem.getPassword()) &&
+                    oldItem.getIdFb().equals(newItem.getIdFb()) &&
+                    oldItem.isCompromised() == newItem.isCompromised() &&
+                    oldItem.isWeak() == newItem.isWeak() &&
+                    oldItem.isDuplicate() == newItem.isDuplicate() &&
+                    oldItem.isUrlUnsafe() == newItem.isUrlUnsafe();
         }
     }
 }
