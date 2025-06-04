@@ -61,7 +61,9 @@
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
                 app:startIconDrawable="@drawable/ic_email"
-                app:startIconTint="@color/iconTint">
+                app:startIconTint="@color/iconTint"
+                app:boxStrokeColor="@color/secondaryText"
+                app:hintTextColor="@color/secondaryText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailEditText"
@@ -88,7 +90,9 @@
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/iconTint"
                 app:startIconDrawable="@drawable/ic_password"
-                app:startIconTint="@color/iconTint">
+                app:startIconTint="@color/iconTint"
+                app:boxStrokeColor="@color/secondaryText"
+                app:hintTextColor="@color/secondaryText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordEditText"
