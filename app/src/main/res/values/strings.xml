@@ -50,6 +50,9 @@
     <string name="sort_name_desc">Nombre (Z-A)</string>
     <string name="sort_date_newest">Más reciente primero</string>
     <string name="sort_date_oldest">Más antiguo primero</string>
+
+
+
     <string name="signup_title">Registro</string>
     <string name="confirm_password">Confirmar Contraseña</string>
     <string name="register_button_text">Registrarse</string>
@@ -66,15 +69,7 @@
     <string name="menu_darkmode_text">Modo oscuro</string>
     <string name="menu_logout_text">Cerrar sesión</string>
     <string name="select_language">Seleccionar idioma</string>
-    <string name="generate_password">Generar contraseña</string>
-    <string name="generate_new_password">Generar nueva contraseña</string>
     <string name="password">Contraseña</string>
-    <string name="use_uppercase_lowercase">Usar mayúsculas y minúsculas</string>
-    <string name="include_numbers">Incluir números</string>
-    <string name="include_special_chars">Incluir caracteres especiales</string>
-    <string name="password_length_format">Longitud de contraseña: %1$d</string>
-    <string name="save_password">Guardar contraseña</string>
-    <string name="password_strength">Fortaleza de la contraseña</string>
     <string name="password_copied">Contraseña copiada</string>
     <string name="very_weak">Muy débil</string>
     <string name="weak">Débil</string>
@@ -86,15 +81,29 @@
 
     <string name="save_password_title">Guardar contraseña</string>
     <string name="helper_required">Obligatorio</string>
-    <string name="helper_optional">Opcional</string>
-    <string name="button_cancel">Cancelar</string>
     <string name="required_field">Campo requerido</string>
     <string name="required_email_field">Correo requerido</string>
     <string name="required_password_field">Contraseña requerida</string>
-    <string name="required_master_password_field">Contraseña maestra requerida</string>ç
+    <string name="required_master_password_field">Contraseña maestra requerida</string>
     <string name="invalid_email_format">Correo electronico inválido</string>
     <string name="passwords_dont_match">Las contraseñas no coinciden</string>
     <string name="incorrect_master_password">Contraseña maestra incorrecta</string>
+    <string name="dashboard">Estadísticas</string>
 
+    <!-- Strings para las tarjetas de estadísticas -->
+    <string name="secure_passwords">Contraseñas seguras</string>
+    <string name="compromised_passwords">Contraseñas comprometidas</string>
+    <string name="generate_new_password">Crear nueva contraseña</string>
 
+    <!-- Strings para la generación de contraseñas -->
+    <string name="generate_password">Generar contraseña</string>
+    <string name="save_password">Guardar contraseña</string>
+    <string name="password_strength">Fortaleza de la contraseña</string>
+    <string name="password_length_format">Longitud: %1$d caracteres</string>
+    <string name="use_uppercase_lowercase">Mayúsculas y minúsculas</string>
+    <string name="include_numbers">Incluir números</string>
+    <string name="include_special_chars">Incluir caracteres especiales</string>
+    <string name="helper_optional">Opcional</string>
+    <string name="button_cancel">Cancelar</string>
 </resources>
+

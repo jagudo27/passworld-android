@@ -2,7 +2,6 @@ package mobile.passworld.utils;
 
 import android.util.Log;
 
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.Executor;

@@ -44,10 +44,6 @@ public class PasswordRepository {
         void onError(DatabaseError error);
     }
 
-    public interface PasswordCallback {
-        void onPasswordLoaded(PasswordDTO password);
-        void onError(DatabaseError error);
-    }
 
     public interface OperationCallback {
         void onSuccess();

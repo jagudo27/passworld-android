@@ -1,7 +1,6 @@
 package mobile.passworld.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -18,6 +17,7 @@ import java.util.Locale;
 
 import mobile.passworld.R;
 import mobile.passworld.activity.SignInActivity;
+import mobile.passworld.data.PasswordRepository;
 import mobile.passworld.session.UserSession;
 
 public class PopupManager {

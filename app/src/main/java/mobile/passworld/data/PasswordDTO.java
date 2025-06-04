@@ -2,11 +2,12 @@ package mobile.passworld.data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+
 
 import mobile.passworld.utils.TimeSyncManager;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 public class PasswordDTO implements Serializable {
     private int id;
