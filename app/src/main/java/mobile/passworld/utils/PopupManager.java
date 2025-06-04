@@ -1,9 +1,11 @@
 package mobile.passworld.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.PopupMenu;
 
@@ -29,7 +31,9 @@ public class PopupManager {
     }
 
     public static void showOptionsMenu(Activity activity, View anchor, boolean isUserLoggedIn, MenuCallback callback) {
-        PopupMenu popupMenu = new PopupMenu(activity, anchor);
+        // Usar un contexto envuelto con el tema de la app para garantizar que se aplique el estilo
+        Context contextWrapper = new ContextThemeWrapper(activity, R.style.PopupMenu_PassworldAndroid);
+        PopupMenu popupMenu = new PopupMenu(contextWrapper, anchor);
         popupMenu.getMenuInflater().inflate(R.menu.menu_options, popupMenu.getMenu());
         
         // Mostrar opción de cerrar sesión solo si el usuario está autenticado
@@ -59,7 +63,9 @@ public class PopupManager {
     }
 
     public static void showSortMenu(Activity activity, View anchor, SortMenuCallback callback) {
-        PopupMenu popupMenu = new PopupMenu(activity, anchor);
+        // Usar un contexto envuelto con el tema de la app para garantizar que se aplique el estilo
+        Context contextWrapper = new ContextThemeWrapper(activity, R.style.Theme_PassworldAndroid);
+        PopupMenu popupMenu = new PopupMenu(contextWrapper, anchor);
         popupMenu.getMenuInflater().inflate(R.menu.menu_sort_options, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(item -> {
