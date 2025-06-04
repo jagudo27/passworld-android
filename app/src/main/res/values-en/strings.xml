@@ -104,6 +104,15 @@
     <string name="include_special_chars">Include special characters</string>
     <string name="helper_optional">Optional</string>
     <string name="button_cancel">Cancel</string>
+    <string name="all_label">All</string>
+    <string name="security_label">Security</string>
+    <string name="item_description">Description</string>
+    <string name="passwords_security_issues_label">Passwords with security issues</string>
+    <string name="generated_password_hint">Generated password</string>
+    <string name="aa_hint">Aa</string>
+    <string name="_123_hint">123</string>
+    <string name="symbols_hint">#@$!</string>
+
 
 
 </resources>

@@ -25,5 +25,22 @@
 
     <style name="PopupMenu.PassworldAndroid" parent="Widget.MaterialComponents.PopupMenu">
         <item name="android:popupBackground">@drawable/popup_menu_background_dark</item>
+        <item name="android:textAppearance">?attr/textAppearanceBodyMedium</item>
+        <item name="android:itemTextAppearance">?attr/textAppearanceBodyMedium</item>
+        <item name="fontFamily">@font/helveticaneue_medium</item>
+        <item name="android:fontFamily">@font/helveticaneue_medium</item>
+    </style>
+    <style name="BlackSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint">@color/iconTint</item>
+        <item name="android:secondaryProgressTint">@color/iconTint</item>
+        <item name="android:thumbTint">@color/iconTint</item> <!-- Color del thumb del SeekBar -->
+    </style>
+    <style name="BlackCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+
+        <item name="colorControlNormal">@color/white</item> <!-- Color del borde del CheckBox sin marcar -->
+        <item name="android:buttonTint">@color/white</item> <!-- Color del botón del CheckBox -->
+        <item name="android:buttonStyle">@style/BlackCheckBox</item> <!-- Aplicar el estilo personalizado -->
+        <item name="colorControlActivated">@color/black</item> <!-- Color del CheckBox marcado -->
+
     </style>
 </resources>
