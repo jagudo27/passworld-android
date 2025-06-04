@@ -109,10 +109,21 @@ public class SavePasswordDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        if (dialog != null) {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setLayout(width, height);
+        if (dialog != null && dialog.getWindow() != null) {
+            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+            float density = getResources().getDisplayMetrics().density;
+            int dpWidth = (int) (screenWidth / density); // Convertimos a dp
+
+            int width;
+            if (dpWidth >= 600) {
+                // Tablet: usar 60% del ancho de pantalla
+                width = (int) (screenWidth * 0.6);
+            } else {
+                // Móvil: usar MATCH_PARENT
+                width = (int) (screenWidth * 0.9);
+            }
+
+            dialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
     }
