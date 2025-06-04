@@ -125,7 +125,7 @@ public class SavePasswordDialogFragment extends DialogFragment {
 
         // Validar descripción
         if (description.isEmpty()) {
-            dialogDescription.setError(getString(R.string.required_field);
+            dialogDescription.setError(getString(R.string.required_field));
             dialogDescription.requestFocus();
             return;
         }
