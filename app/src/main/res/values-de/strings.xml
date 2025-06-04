@@ -65,9 +65,45 @@
     <string name="menu_changelanguage_text">Sprache ändern</string>
     <string name="menu_darkmode_text">Dunkelmodus</string>
     <string name="menu_logout_text">Abmelden</string>
-
-
     <string name="select_language">Sprache auswählen</string>
+
+    <string name="password">Passwort</string>
+    <string name="password_copied">Passwort kopiert</string>
+    <string name="very_weak">Sehr schwach</string>
+    <string name="weak">Schwach</string>
+    <string name="medium">Mittel</string>
+    <string name="strong">Stark</string>
+    <string name="very_strong">Sehr stark</string>
+    <string name="password_saved">Passwort gespeichert</string>
+    <string name="error_saving_password">Fehler beim Speichern</string>
+
+    <string name="save_password_title">Passwort speichern</string>
+    <string name="helper_required">Erforderlich</string>
+    <string name="required_field">Pflichtfeld</string>
+    <string name="required_email_field">E-Mail erforderlich</string>
+    <string name="required_password_field">Passwort erforderlich</string>
+    <string name="required_master_password_field">Master-Passwort erforderlich</string>
+    <string name="invalid_email_format">Ungültiges E-Mail-Format</string>
+    <string name="passwords_dont_match">Passwörter stimmen nicht überein</string>
+    <string name="incorrect_master_password">Falsches Master-Passwort</string>
+    <string name="dashboard">Statistiken</string>
+
+    <!-- Statistik-Karten -->
+    <string name="secure_passwords">Sichere Passwörter</string>
+    <string name="compromised_passwords">Kompromittierte Passwörter</string>
+    <string name="generate_new_password">Neues Passwort erstellen</string>
+
+    <!-- Passwort-Generierung -->
+    <string name="generate_password">Passwort generieren</string>
+    <string name="save_password">Passwort speichern</string>
+    <string name="password_strength">Passwortstärke</string>
+    <string name="password_length_format">Länge: %1$d Zeichen</string>
+    <string name="use_uppercase_lowercase">Groß- und Kleinbuchstaben</string>
+    <string name="include_numbers">Zahlen einbeziehen</string>
+    <string name="include_special_chars">Sonderzeichen einbeziehen</string>
+    <string name="helper_optional">Optional</string>
+    <string name="button_cancel">Abbrechen</string>
+
 
 
 

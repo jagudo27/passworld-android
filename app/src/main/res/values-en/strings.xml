@@ -68,4 +68,42 @@
     <string name="menu_logout_text">Log out</string>
     <string name="select_language">Select language</string>
 
+    <string name="password">Password</string>
+    <string name="password_copied">Password copied</string>
+    <string name="very_weak">Very weak</string>
+    <string name="weak">Weak</string>
+    <string name="medium">Medium</string>
+    <string name="strong">Strong</string>
+    <string name="very_strong">Very strong</string>
+    <string name="password_saved">Password saved</string>
+    <string name="error_saving_password">Error saving password</string>
+
+    <string name="save_password_title">Save password</string>
+    <string name="helper_required">Required</string>
+    <string name="required_field">Required field</string>
+    <string name="required_email_field">Email required</string>
+    <string name="required_password_field">Password required</string>
+    <string name="required_master_password_field">Master password required</string>
+    <string name="invalid_email_format">Invalid email format</string>
+    <string name="passwords_dont_match">Passwords do not match</string>
+    <string name="incorrect_master_password">Incorrect master password</string>
+    <string name="dashboard">Statistics</string>
+
+    <!-- Statistic cards -->
+    <string name="secure_passwords">Secure passwords</string>
+    <string name="compromised_passwords">Compromised passwords</string>
+    <string name="generate_new_password">Create new password</string>
+
+    <!-- Password generation -->
+    <string name="generate_password">Generate password</string>
+    <string name="save_password">Save password</string>
+    <string name="password_strength">Password strength</string>
+    <string name="password_length_format">Length: %1$d characters</string>
+    <string name="use_uppercase_lowercase">Uppercase and lowercase</string>
+    <string name="include_numbers">Include numbers</string>
+    <string name="include_special_chars">Include special characters</string>
+    <string name="helper_optional">Optional</string>
+    <string name="button_cancel">Cancel</string>
+
+
 </resources>
