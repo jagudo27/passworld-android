@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,17 +16,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseError;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import mobile.passworld.R;
 import mobile.passworld.activity.adapter.PasswordAdapter;
 import mobile.passworld.activity.fragment.PasswordDetailDialogFragment;
+import mobile.passworld.activity.fragment.SavePasswordDialogFragment;
 import mobile.passworld.data.PasswordDTO;
 import mobile.passworld.data.PasswordRepository;
 import mobile.passworld.session.UserSession;
@@ -41,9 +44,22 @@ public class PasswordListActivity extends AppCompatActivity {
     private ImageView sortButton;
     private ImageView optionsButton;
 
+    // Variables para estadísticas
+    private TextView allPasswordsCount;
+    private TextView compromisedPasswordsCount;
+    private MaterialCardView allPasswordsCard;
+    private MaterialCardView compromisedPasswordsCard;
+
+    // Enumeración para el filtro actual
+    private enum PasswordFilter {
+        ALL,
+        COMPROMISED
+    }
+
     // Variables para controlar la lista
     private List<PasswordDTO> allPasswords = new ArrayList<>();
     private List<PasswordDTO> filteredPasswords = new ArrayList<>();
+    private PasswordFilter currentFilter = PasswordFilter.ALL;
 
     private FloatingActionButton generatePasswordButton;
     private static final int REQUEST_GENERATE_PASSWORD = 101;
@@ -58,10 +74,17 @@ public class PasswordListActivity extends AppCompatActivity {
         emptyView = findViewById(R.id.emptyView);
         searchEditText = findViewById(R.id.searchEditText);
         clearSearchButton = findViewById(R.id.clearSearchButton);
-
-
         sortButton = findViewById(R.id.sortButton);
         optionsButton = findViewById(R.id.menuButton);
+
+        // Referencias a los componentes de estadísticas
+        allPasswordsCount = findViewById(R.id.allPasswordsCount);
+        compromisedPasswordsCount = findViewById(R.id.compromisedPasswordsCount);
+        allPasswordsCard = findViewById(R.id.allPasswordsCard);
+        compromisedPasswordsCard = findViewById(R.id.compromisedPasswordsCard);
+
+        // Configurar listeners para las tarjetas de filtro
+        setupFilterCards();
 
         optionsButton.setOnClickListener(v -> {
             PopupManager.showOptionsMenu(this, optionsButton, UserSession.getInstance().isLoggedIn(), new PopupManager.MenuCallback() {
@@ -81,6 +104,7 @@ public class PasswordListActivity extends AppCompatActivity {
                 }
             });
         });
+
         // Añade este código en el método onCreate(), después de inicializar los demás elementos
         generatePasswordButton = findViewById(R.id.generatePasswordButton);
         generatePasswordButton.setOnClickListener(v -> {
@@ -175,10 +199,13 @@ public class PasswordListActivity extends AppCompatActivity {
                     // Ordenar y mostrar contraseñas
                     sortPasswordsByName(true); // Orden inicial A-Z
                 }
+
+                // Actualizar estadísticas
+                updatePasswordStats();
             }
 
             @Override
-            public void onError(com.google.firebase.database.DatabaseError error) {
+            public void onError(DatabaseError error) {
                 emptyView.setText("Error al cargar contraseñas");
                 emptyView.setVisibility(View.VISIBLE);
                 passwordRecyclerView.setVisibility(View.GONE);
@@ -187,10 +214,11 @@ public class PasswordListActivity extends AppCompatActivity {
     }
 
     private void filterPasswords(String query) {
-        filteredPasswords.clear();
+        // Crear una nueva lista para los resultados filtrados
+        List<PasswordDTO> newFilteredList = new ArrayList<>();
 
         if (query.isEmpty()) {
-            filteredPasswords.addAll(allPasswords);
+            newFilteredList.addAll(allPasswords);
         } else {
             String lowerCaseQuery = query.toLowerCase().trim();
             for (PasswordDTO password : allPasswords) {
@@ -202,27 +230,50 @@ public class PasswordListActivity extends AppCompatActivity {
                 if ((description != null && description.toLowerCase().contains(lowerCaseQuery)) ||
                         (username != null && username.toLowerCase().contains(lowerCaseQuery)) ||
                         (url != null && url.toLowerCase().contains(lowerCaseQuery))) {
-                    filteredPasswords.add(password);
+                    newFilteredList.add(password);
                 }
             }
         }
 
-        // Aplicar el ordenamiento actual
+        // Actualizar la lista filtrada y aplicar el ordenamiento actual
+        filteredPasswords = newFilteredList;
         updateAdapterData();
     }
 
     private void sortPasswordsByName(boolean ascending) {
-        filteredPasswords.sort((p1, p2) -> {
-            int result = p1.getDescription().compareToIgnoreCase(p2.getDescription());
+        // Crear una nueva lista para ordenar (importante para ListAdapter)
+        List<PasswordDTO> sortedList = new ArrayList<>(filteredPasswords);
+
+        sortedList.sort((p1, p2) -> {
+            // Manejar casos en los que description pueda ser null
+            String desc1 = p1.getDescription();
+            String desc2 = p2.getDescription();
+
+            // Si ambos son null, son "iguales"
+            if (desc1 == null && desc2 == null) return 0;
+            // Si solo desc1 es null, debería ir después (o antes si orden descendente)
+            if (desc1 == null) return ascending ? 1 : -1;
+            // Si solo desc2 es null, debería ir antes (o después si orden descendente)
+            if (desc2 == null) return ascending ? -1 : 1;
+
+            // Si ninguno es null, comparar normalmente
+            int result = desc1.compareToIgnoreCase(desc2);
             return ascending ? result : -result;
         });
+
+        // Actualizar la lista filtrada y notificar al adaptador
+        filteredPasswords = sortedList;
         updateAdapterData();
     }
 
     private void sortPasswordsByDate(boolean newestFirst) {
-        filteredPasswords.sort((p1, p2) -> {
+        // Crear una nueva lista para ordenar
+        List<PasswordDTO> sortedList = new ArrayList<>(filteredPasswords);
+
+        sortedList.sort((p1, p2) -> {
             // Obtener LocalDateTime de cada contraseña
-            LocalDateTime date1 = p1.getLastModifiedAsDate(); // Usa el método existente con 'l' minúscula
+            LocalDateTime date1 = p1.getLastModifiedAsDate();
+            Log.d("PasswordListActivity", "Comparando: " + p1.getDescription() + " - Fecha: " + date1);
             LocalDateTime date2 = p2.getLastModifiedAsDate();
 
             // Manejar valores nulos (contraseñas sin fecha)
@@ -230,21 +281,30 @@ public class PasswordListActivity extends AppCompatActivity {
             if (date1 == null) return newestFirst ? 1 : -1;
             if (date2 == null) return newestFirst ? -1 : 1;
 
-            // Comparar fechas (LocalDateTime tiene su propio compareTo)
+            // Comparar fechas
             int comparison = date1.compareTo(date2);
 
             // Invertir si queremos las más recientes primero
             return newestFirst ? -comparison : comparison;
         });
+
+        // Actualizar la lista filtrada y notificar al adaptador
+        filteredPasswords = sortedList;
         updateAdapterData();
     }
 
     private void sortPasswordsBySecurity(boolean mostVulnerableFirst) {
-        filteredPasswords.sort((p1, p2) -> {
+        // Crear una nueva lista para ordenar
+        List<PasswordDTO> sortedList = new ArrayList<>(filteredPasswords);
+
+        sortedList.sort((p1, p2) -> {
             int p1Issues = getSecurityScore(p1);
             int p2Issues = getSecurityScore(p2);
             return mostVulnerableFirst ? p2Issues - p1Issues : p1Issues - p2Issues;
         });
+
+        // Actualizar la lista filtrada y notificar al adaptador
+        filteredPasswords = sortedList;
         updateAdapterData();
     }
 
@@ -258,7 +318,9 @@ public class PasswordListActivity extends AppCompatActivity {
     }
 
     private void updateAdapterData() {
-        adapter.setPasswords(filteredPasswords);
+        // Crear una nueva instancia de la lista para que ListAdapter detecte el cambio
+        List<PasswordDTO> listToSubmit = new ArrayList<>(filteredPasswords);
+        adapter.submitList(listToSubmit);
 
         // Mostrar mensaje cuando no hay resultados
         if (filteredPasswords.isEmpty()) {
@@ -277,16 +339,160 @@ public class PasswordListActivity extends AppCompatActivity {
         dialog.setListener(new PasswordDetailDialogFragment.OnPasswordActionListener() {
             @Override
             public void onPasswordUpdated() {
-                // La contraseña se actualizó, refrescar la lista si es necesario
-                // (no debería ser necesario si usas el listener en tiempo real)
+                // La contraseña se actualizó, refrescar la lista
+                loadPasswords();
             }
 
             @Override
             public void onPasswordDeleted() {
-                // La contraseña se eliminó, refrescar la lista si es necesario
-                // (no debería ser necesario si usas el listener en tiempo real)
+                // La contraseña se eliminó, refrescar la lista
+                loadPasswords();
             }
         });
         dialog.show(getSupportFragmentManager(), "password_detail");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_GENERATE_PASSWORD && resultCode == RESULT_OK && data != null) {
+            String generatedPassword = data.getStringExtra("generatedPassword");
+            if (generatedPassword != null && !generatedPassword.isEmpty()) {
+                // Mostrar el diálogo para guardar la contraseña
+                showSavePasswordDialog(generatedPassword);
+            }
+        }
+    }
+
+    private void showSavePasswordDialog(String password) {
+        SavePasswordDialogFragment dialog = SavePasswordDialogFragment.newInstance(password);
+        dialog.setOnPasswordSaveListener(passwordDTO -> {
+            // Guardar la nueva contraseña
+            repository.savePassword(passwordDTO, new PasswordRepository.OperationCallback() {
+                @Override
+                public void onSuccess() {
+                    // Recargar lista de contraseñas
+                    loadPasswords();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    // Manejar error
+                    // Aquí podrías mostrar un mensaje al usuario
+                }
+            });
+        });
+        dialog.show(getSupportFragmentManager(), "save_password_dialog");
+    }
+
+    /**
+     * Configura los listeners para las tarjetas de filtro de contraseñas
+     */
+    private void setupFilterCards() {
+        // Configurar tarjeta de todas las contraseñas
+        allPasswordsCard.setOnClickListener(v -> {
+            currentFilter = PasswordFilter.ALL;
+            applyCurrentFilter();
+            updateCardSelection();
+        });
+
+        // Configurar tarjeta de contraseñas comprometidas
+        compromisedPasswordsCard.setOnClickListener(v -> {
+            currentFilter = PasswordFilter.COMPROMISED;
+            applyCurrentFilter();
+            updateCardSelection();
+        });
+    }
+
+    /**
+     * Actualiza la selección visual de las tarjetas según el filtro actual
+     */
+    private void updateCardSelection() {
+        // Resetear todas las tarjetas
+        allPasswordsCard.setStrokeWidth(0);
+        compromisedPasswordsCard.setStrokeWidth(0);
+
+        // Destacar la tarjeta seleccionada
+        switch (currentFilter) {
+            case ALL:
+                allPasswordsCard.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.card_selected_stroke_width));
+                break;
+            case COMPROMISED:
+                compromisedPasswordsCard.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.card_selected_stroke_width));
+                break;
+        }
+    }
+
+    /**
+     * Aplica el filtro actual a la lista de contraseñas
+     */
+    private void applyCurrentFilter() {
+        // Si no hay contraseñas, no hay nada que filtrar
+        if (allPasswords.isEmpty()) {
+            return;
+        }
+
+        // Texto de búsqueda actual
+        String searchQuery = searchEditText.getText().toString().trim();
+
+        // Aplicar filtro según la categoría seleccionada
+        switch (currentFilter) {
+            case ALL:
+                // Sin filtro específico, solo aplicar búsqueda si existe
+                if (!searchQuery.isEmpty()) {
+                    filterPasswords(searchQuery);
+                } else {
+                    filteredPasswords = new ArrayList<>(allPasswords);
+                    updateAdapterData();
+                }
+                break;
+            case COMPROMISED:
+                // Filtrar solo contraseñas comprometidas
+                List<PasswordDTO> compromisedList = new ArrayList<>();
+                for (PasswordDTO password : allPasswords) {
+                    if (password.isCompromised() || password.isWeak() || password.isDuplicate() || password.isUrlUnsafe()) {
+                        // Si hay búsqueda, también filtrar por texto
+                        if (searchQuery.isEmpty() || matchesSearchQuery(password, searchQuery)) {
+                            compromisedList.add(password);
+                        }
+                    }
+                }
+                filteredPasswords = compromisedList;
+                updateAdapterData();
+                break;
+        }
+    }
+
+    /**
+     * Verifica si una contraseña coincide con la consulta de búsqueda
+     */
+    private boolean matchesSearchQuery(PasswordDTO password, String query) {
+        String lowerCaseQuery = query.toLowerCase().trim();
+        String description = password.getDescription();
+        String username = password.getUsername();
+        String url = password.getUrl();
+
+        return (description != null && description.toLowerCase().contains(lowerCaseQuery)) ||
+                (username != null && username.toLowerCase().contains(lowerCaseQuery)) ||
+                (url != null && url.toLowerCase().contains(lowerCaseQuery));
+    }
+
+    /**
+     * Actualiza las estadísticas mostradas en las tarjetas
+     */
+    private void updatePasswordStats() {
+        int totalPasswords = allPasswords.size();
+        int compromisedCount = 0;
+
+        // Contar contraseñas comprometidas
+        for (PasswordDTO password : allPasswords) {
+            if (password.isCompromised() || password.isWeak() || password.isDuplicate() || password.isUrlUnsafe()) {
+                compromisedCount++;
+            }
+        }
+
+        // Actualizar contadores en UI
+        allPasswordsCount.setText(String.valueOf(totalPasswords));
+        compromisedPasswordsCount.setText(String.valueOf(compromisedCount));
     }
 }
