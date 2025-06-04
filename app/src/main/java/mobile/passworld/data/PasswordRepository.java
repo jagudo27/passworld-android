@@ -81,6 +81,7 @@ public class PasswordRepository {
                     dto.setUsername(child.child("username").getValue(String.class));
                     // Recuperar el campo lastModified
                     String lastModified = child.child("lastModified").getValue(String.class);
+
                     dto.setLastModified(lastModified);
 
                     // Campos booleanos
@@ -239,9 +240,11 @@ public class PasswordRepository {
     private void updateSecurityStatus(List<PasswordDTO> passwords) {
         SecurityFilterUtils.clearUniquePasswords();
 
-        // Analizar cada contraseña
-        for (PasswordDTO password : passwords) {
-            SecurityFilterUtils.analyzePasswordSecurity(password);
-        }
+        // Analizar cada contraseña de forma asíncrona
+        SecurityFilterUtils.analyzePasswordsSecurityAsync(passwords, () -> {
+            // Este callback se ejecutará cuando todas las comprobaciones hayan terminado
+            // No es necesario hacer nada más porque las contraseñas ya están actualizadas
+        });
     }
 }
+

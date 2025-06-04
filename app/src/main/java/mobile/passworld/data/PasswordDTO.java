@@ -2,7 +2,11 @@ package mobile.passworld.data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+
+import mobile.passworld.utils.TimeSyncManager;
+import android.util.Log;
 
 public class PasswordDTO implements Serializable {
     private int id;
@@ -57,19 +61,18 @@ public class PasswordDTO implements Serializable {
             return null;
         }
         try {
-            // Usar DateTimeFormatter.ISO_DATE_TIME para manejar el formato con nanosegundos
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-            return LocalDateTime.parse(lastModified, formatter);
+            // Usa TimeSyncManager para parsear (ahora soporta formatos con y sin Z)
+            return TimeSyncManager.parseUtcStringToLocalDateTime(lastModified);
         } catch (Exception e) {
-            return null; // En caso de error en el parseo
+            // Si falla el parseo, registra el error y devuelve null
+            Log.e("PasswordDTO", "Error al parsear la fecha: " + lastModified + " - " + e.getMessage());
+            return null;
         }
     }
 
     // Método para establecer la fecha actual como lastModified
     public void setLastModifiedToNow() {
-        // Crear un formateador personalizado que coincida exactamente con el formato deseado
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
-        this.lastModified = LocalDateTime.now().format(formatter);
+        this.lastModified = TimeSyncManager.nowUtcCorrectedString();
     }
 
     public String getIdFb() {
@@ -175,3 +178,4 @@ public class PasswordDTO implements Serializable {
     }
 
 }
+
