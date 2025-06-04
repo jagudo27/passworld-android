@@ -4,23 +4,47 @@ import mobile.passworld.data.PasswordDTO;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SecurityFilterUtils {
 
     // Conjunto que mantiene las contraseñas únicas activas
     private static final Set<String> uniquePasswords = new HashSet<>();
 
-    // Analizar la seguridad de una contraseña, usuario y URL
-    public static void analyzePasswordSecurity(PasswordDTO passwordDTO) {
+    public interface SecurityAnalysisCallback {
+        void onAnalysisComplete(PasswordDTO password);
+    }
+
+    // Analizar la seguridad de una contraseña de manera asíncrona
+    public static void analyzePasswordSecurityAsync(PasswordDTO passwordDTO, SecurityAnalysisCallback callback) {
         boolean isWeak = isWeakPassword(passwordDTO.getPassword());
         boolean isDuplicate = isDuplicatePassword(passwordDTO.getPassword());
-        boolean isCompromised = isCompromisedPassword(passwordDTO.getPassword());
         boolean isUrlUnsafe = isUrlUnsafe(passwordDTO.getUrl());
 
         passwordDTO.setWeak(isWeak);
         passwordDTO.setDuplicate(isDuplicate);
-        passwordDTO.setCompromised(isCompromised);
         passwordDTO.setUrlUnsafe(isUrlUnsafe);
+
+        // Comprobar si está comprometida de forma asíncrona
+        CompromisedPasswordChecker.checkIfCompromised(passwordDTO.getPassword(), isCompromised -> {
+            passwordDTO.setCompromised(isCompromised);
+            callback.onAnalysisComplete(passwordDTO);
+        });
+    }
+
+    // Método sincrónico original (mantener para compatibilidad)
+    public static void analyzePasswordSecurity(PasswordDTO passwordDTO) {
+        boolean isWeak = isWeakPassword(passwordDTO.getPassword());
+        boolean isDuplicate = isDuplicatePassword(passwordDTO.getPassword());
+        boolean isUrlUnsafe = isUrlUnsafe(passwordDTO.getUrl());
+
+        passwordDTO.setWeak(isWeak);
+        passwordDTO.setDuplicate(isDuplicate);
+        passwordDTO.setUrlUnsafe(isUrlUnsafe);
+
+        // Nota: esto podría bloquear el hilo principal si se llama desde UI
+        passwordDTO.setCompromised(isCompromisedPassword(passwordDTO.getPassword()));
     }
 
     // Verificar si la contraseña es débil
@@ -34,7 +58,6 @@ public class SecurityFilterUtils {
         return !uniquePasswords.add(password);  // Si no se puede agregar, es duplicada
     }
 
-
     // Verificar si la contraseña ha sido comprometida
     private static boolean isCompromisedPassword(String password) {
         try {
@@ -46,27 +69,48 @@ public class SecurityFilterUtils {
         }
     }
 
+    // Método para analizar múltiples contraseñas de forma asíncrona
+    public static void analyzePasswordsSecurityAsync(List<PasswordDTO> passwords, Runnable onCompleteCallback) {
+        if (passwords.isEmpty()) {
+            onCompleteCallback.run();
+            return;
+        }
+
+        AtomicInteger pendingChecks = new AtomicInteger(passwords.size());
+
+        for (PasswordDTO password : passwords) {
+            analyzePasswordSecurityAsync(password, updatedPassword -> {
+                if (pendingChecks.decrementAndGet() == 0) {
+                    onCompleteCallback.run();
+                }
+            });
+        }
+    }
+
     // Eliminar una contraseña de la lista de contraseñas únicas
-    public void removeUniquePassword(String password) {
+    public static void removeUniquePassword(String password) {
         uniquePasswords.remove(password);
     }
 
-    // Agregar una contraseña a la lista de contraseñas únicas
-    public static void addUniquePassword(String password) {
-        uniquePasswords.add(password);
+    // Método para verificar si una URL es insegura
+    private static boolean isUrlUnsafe(String url) {
+        if (url == null || url.isEmpty() || url.equals("null")) {
+            return false;
+        }
+
+        // Verificar si la URL comienza con http:// (no segura)
+        return url.toLowerCase().startsWith("http://");
     }
 
-    // Limpiar la lista de contraseñas únicas
+    // Limpiar el conjunto de contraseñas únicas
     public static void clearUniquePasswords() {
         uniquePasswords.clear();
     }
 
-    // Verificar si la URL es insegura
-    public static boolean isUrlUnsafe(String url) {
-        return UnsafeUrlChecker.isUnsafe(url);
-    }
-
-    public static boolean hasPasswordSecurityIssues(PasswordDTO passwordDTO) {
-        return passwordDTO.isWeak() || passwordDTO.isDuplicate() || passwordDTO.isCompromised() || passwordDTO.isUrlUnsafe();
+    // Agregar una contraseña al conjunto de contraseñas únicas
+    public static void addUniquePassword(String password) {
+        if (password != null && !password.isEmpty()) {
+            uniquePasswords.add(password);
+        }
     }
 }
