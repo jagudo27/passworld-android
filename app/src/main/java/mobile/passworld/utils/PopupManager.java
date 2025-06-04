@@ -3,7 +3,6 @@ package mobile.passworld.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.view.View;
@@ -96,25 +95,32 @@ public class PopupManager {
 
     private static void showLanguageDialog(Activity activity, MenuCallback callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(activity.getString(R.string.select_language)); // Puedes extraer esto a strings.xml si lo deseas
+        builder.setTitle(activity.getString(R.string.select_language));
         String[] languages = {"Español", "English", "Deutsch"};
 
         builder.setItems(languages, (dialog, which) -> {
+            String languageCode;
             Locale locale;
             switch (which) {
                 case 0:
-                    locale = new Locale("es");
+                    languageCode = "es";
+                    locale = new Locale(languageCode);
                     break;
                 case 1:
-                    locale = new Locale("en");
+                    languageCode = "en";
+                    locale = new Locale(languageCode);
                     break;
                 case 2:
-                    locale = new Locale("de");
+                    languageCode = "de";
+                    locale = new Locale(languageCode);
                     break;
                 default:
-                    locale = Locale.getDefault(); // fallback
+                    languageCode = Locale.getDefault().getLanguage();
+                    locale = Locale.getDefault();
             }
 
+            // Guardar preferencia de idioma
+            UserPreferences.saveLanguagePreference(activity, languageCode);
             updateLocale(activity, locale);
 
             if (callback != null) {
@@ -124,7 +130,6 @@ public class PopupManager {
 
         builder.show();
     }
-
 
     private static void updateLocale(Activity activity, Locale locale) {
         Resources resources = activity.getResources();
@@ -144,9 +149,9 @@ public class PopupManager {
                 ? AppCompatDelegate.MODE_NIGHT_YES 
                 : AppCompatDelegate.MODE_NIGHT_NO);
 
-        SharedPreferences preferences = activity.getSharedPreferences("app_settings", Context.MODE_PRIVATE);
-        preferences.edit().putBoolean("dark_mode", isDarkMode).apply();
-        
+        // Guardar preferencia de modo oscuro
+        UserPreferences.saveDarkModePreference(activity, isDarkMode);
+
         if (callback != null) {
             callback.onDarkModeChanged(isDarkMode);
         }
@@ -172,3 +177,4 @@ public class PopupManager {
         activity.finish();
     }
 }
+
