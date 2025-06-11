@@ -95,11 +95,16 @@ public class SecurityFilterUtils {
     // Método para verificar si una URL es insegura
     private static boolean isUrlUnsafe(String url) {
         if (url == null || url.isEmpty() || url.equals("null")) {
-            return false;
+            return false; // URL vacía o nula no es insegura
         }
 
         // Verificar si la URL comienza con http:// (no segura)
-        return url.toLowerCase().startsWith("http://");
+        if (url.startsWith("http://")) {
+            return true; // URL insegura
+        }
+
+        // Comprobar con safe browsing API
+        return UnsafeUrlChecker.isUnsafe(url);
     }
 
     // Limpiar el conjunto de contraseñas únicas
