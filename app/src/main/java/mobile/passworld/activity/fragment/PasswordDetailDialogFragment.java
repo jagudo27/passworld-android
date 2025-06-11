@@ -1,6 +1,7 @@
 package mobile.passworld.activity.fragment;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,11 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -26,6 +29,7 @@ import mobile.passworld.R;
 import mobile.passworld.data.PasswordDTO;
 import mobile.passworld.data.PasswordRepository;
 import mobile.passworld.utils.LogUtils;
+import mobile.passworld.utils.PasswordEvaluator;
 import mobile.passworld.utils.SecurityFilterUtils;
 
 public class PasswordDetailDialogFragment extends DialogFragment {
@@ -33,6 +37,8 @@ public class PasswordDetailDialogFragment extends DialogFragment {
     private PasswordDTO password;
     private TextInputEditText descriptionField, usernameField, urlField, passwordField;
     private MaterialButton saveButton, deleteButton;
+    private ProgressBar passwordStrengthBar;
+    private TextView passwordStrengthText;
     private boolean hasChanges = false;
 
     public interface OnPasswordActionListener {
@@ -87,7 +93,8 @@ public class PasswordDetailDialogFragment extends DialogFragment {
 
         saveButton = view.findViewById(R.id.savePasswordButton2);
         deleteButton = view.findViewById(R.id.deletePasswordButton);
-        MaterialButton closeButton = view.findViewById(R.id.dialogCloseButton);
+        passwordStrengthBar = view.findViewById(R.id.passwordStrengthBar);
+        passwordStrengthText = view.findViewById(R.id.strengthIndicatorText);
 
         TextView securityText = view.findViewById(R.id.securityIssuesText);
         ImageView securityIcon = view.findViewById(R.id.securityStatusIcon);
@@ -112,8 +119,7 @@ public class PasswordDetailDialogFragment extends DialogFragment {
 
         saveButton.setOnClickListener(v -> savePassword());
         deleteButton.setOnClickListener(v -> deletePassword());
-        closeButton.setOnClickListener(v -> dismiss());
-
+        updateStrengthIndicatorText(PasswordEvaluator.calculateStrength(passwordField.getText().toString()));
         return view;
     }
 
@@ -135,6 +141,14 @@ public class PasswordDetailDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                String newPassword = passwordField.getText() != null ? passwordField.getText().toString() : "";
+                PasswordEvaluator.updatePasswordStrengthInfo(
+                        PasswordEvaluator.calculateStrength(newPassword),
+                        passwordStrengthText,
+                        passwordStrengthBar,
+                        requireContext()
+                );
                 checkForChanges();
             }
         };
@@ -197,13 +211,11 @@ public class PasswordDetailDialogFragment extends DialogFragment {
         if (hasIssues) {
             securityText.setText(issues.toString().trim());
             // Seleccionar icono de advertencia según el modo
-            securityIcon.setImageResource(isDarkMode ?
-                    R.drawable.warning_icon : R.drawable.warning_icon);
+            securityIcon.setImageResource(R.drawable.warning_icon);
         } else {
             securityText.setText(getString(R.string.no_security_issues));
             // Seleccionar icono de protección según el modo
-            securityIcon.setImageResource(isDarkMode ?
-                    R.drawable.protect_icon : R.drawable.protect_icon);
+            securityIcon.setImageResource(R.drawable.protect_icon);
         }
     }
 
@@ -289,5 +301,41 @@ public class PasswordDetailDialogFragment extends DialogFragment {
                 }
             }
         });
+    }
+    private void updateStrengthIndicatorText(int strength) {
+        String strengthText;
+        int colorRes;
+
+        switch (strength) {
+            case 0:
+                strengthText = getString(R.string.very_weak);
+                colorRes = R.color.strengthVeryWeak; // Rojo oscuro
+                break;
+            case 1:
+                strengthText = getString(R.string.weak);
+                colorRes = R.color.strengthWeak; // Naranja
+                break;
+            case 2:
+                strengthText = getString(R.string.medium);
+                colorRes = R.color.strengthModerate; // Amarillo
+                break;
+            case 3:
+                strengthText = getString(R.string.strong);
+                colorRes = R.color.strengthGood; // Verde claro
+                break;
+            case 4:
+                strengthText = getString(R.string.very_strong);
+                colorRes = R.color.strengthStrong; // Verde
+                break;
+            default:
+                strengthText = getString(R.string.weak);
+                colorRes = R.color.strengthWeak;
+                break;
+        }
+
+        passwordStrengthText.setText(strengthText);
+        int color = ContextCompat.getColor(requireContext(), colorRes);
+        passwordStrengthBar.setProgress(strength == 0 ? 10 : strength * 25);
+        passwordStrengthBar.setProgressTintList(ColorStateList.valueOf(color));
     }
 }

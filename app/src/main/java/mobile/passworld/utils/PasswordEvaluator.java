@@ -1,9 +1,15 @@
 package mobile.passworld.utils;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -118,7 +124,8 @@ public class PasswordEvaluator {
     }
 
     // Método para actualizar la interfaz de usuario con la información de fortaleza
-    public static void updatePasswordStrengthInfo(int strength, TextView passwordStrengthLabel, ProgressBar passwordStrengthBar) {
+    @SuppressLint("ResourceAsColor")
+    public static void updatePasswordStrengthInfo(int strength, TextView passwordStrengthLabel, ProgressBar passwordStrengthBar, Context context) {
         // Mapear la fortaleza a porcentajes
         int progressPercentage;
         int colorRes;
@@ -127,7 +134,7 @@ public class PasswordEvaluator {
             case 0: // Muy débil
                 passwordStrengthLabel.setText(R.string.very_weak);
                 progressPercentage = 10;
-                colorRes = Color.RED; // Asegúrate de tener este color
+                colorRes = R.color.strengthVeryWeak; // Asegúrate de tener este color
                 break;
             case 1: // Débil
                 passwordStrengthLabel.setText(R.string.weak);
@@ -151,12 +158,13 @@ public class PasswordEvaluator {
                 break;
             default:
                 progressPercentage = 0;
-                colorRes = android.R.color.darker_gray;
+                colorRes = R.color.strengthVeryWeak; // Por defecto a muy débil
         }
 
         // Establecer el progreso con el porcentaje calculado
         passwordStrengthBar.setProgress(progressPercentage);
-
+        int color = ContextCompat.getColor(context, colorRes);
+        passwordStrengthBar.setProgressTintList(ColorStateList.valueOf(color));
 
 
 
@@ -165,12 +173,22 @@ public class PasswordEvaluator {
         passwordStrengthLabel.setVisibility(View.VISIBLE);
     }
 
-    public static void updateStrengthLabelOnLanguageChange(String password, TextView passwordStrengthLabel, ProgressBar passwordStrengthProgressBar) {
-        if (password.isEmpty()) {
-            return; // No actualiza si no hay una contraseña generada
+    public static boolean isPasswordValid(Context context, String password, EditText passwordEditText) {
+        if (password.length() < 8) {
+            passwordEditText.setError(context.getString(R.string.password_too_short));
+            return false;
         }
 
-        int strength = calculateStrength(password); // Calcular la fortaleza de la contraseña
-        updatePasswordStrengthInfo(strength, passwordStrengthLabel, passwordStrengthProgressBar);
+        if (!password.matches(".*[A-Z].*")) {
+            passwordEditText.setError(context.getString(R.string.password_needs_uppercase));
+            return false;
+        }
+
+        if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) {
+            passwordEditText.setError(context.getString(R.string.password_needs_special));
+            return false;
+        }
+
+        return true;
     }
 }

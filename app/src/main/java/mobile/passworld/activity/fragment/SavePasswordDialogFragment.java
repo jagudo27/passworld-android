@@ -1,6 +1,7 @@
 package mobile.passworld.activity.fragment;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -64,6 +66,7 @@ public class SavePasswordDialogFragment extends DialogFragment {
         dialogUsername = view.findViewById(R.id.dialogUsername);
         dialogUrl = view.findViewById(R.id.dialogUrl);
         dialogPassword = view.findViewById(R.id.dialogPassword);
+        passwordStrengthText = view.findViewById(R.id.strengthIndicatorText);
         passwordStrengthBar = view.findViewById(R.id.passwordStrengthBar);
 
         saveButton = view.findViewById(R.id.savePasswordButton);
@@ -99,9 +102,14 @@ public class SavePasswordDialogFragment extends DialogFragment {
 
     private void updatePasswordStrength(String password) {
         if (passwordStrengthText != null && passwordStrengthBar != null) {
-            // Solo mostrar la evaluación visual, sin guardar el resultado
-            int strength = PasswordEvaluator.calculateStrength(password);
-            PasswordEvaluator.updatePasswordStrengthInfo(strength, passwordStrengthText, passwordStrengthBar);
+            String safePassword = password != null ? password : "";
+            int strength = PasswordEvaluator.calculateStrength(safePassword);
+            PasswordEvaluator.updatePasswordStrengthInfo(
+                    strength,
+                    passwordStrengthText,
+                    passwordStrengthBar,
+                    requireContext() // Asegúrate de pasar el contexto
+            );
         }
     }
 
@@ -119,7 +127,7 @@ public class SavePasswordDialogFragment extends DialogFragment {
                 // Tablet: usar 60% del ancho de pantalla
                 width = (int) (screenWidth * 0.6);
             } else {
-                // Móvil: usar MATCH_PARENT
+                // Móvil: usar 90% del ancho de pantalla
                 width = (int) (screenWidth * 0.9);
             }
 
