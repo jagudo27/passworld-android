@@ -17,4 +17,9 @@
         android:title="@string/menu_logout_text"
         android:visible="false"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_goto_help"
+        android:title="@string/help"
+        app:showAsAction="never" />
+
 </menu>

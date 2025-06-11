@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vaultRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="?android:attr/windowBackground">
+
+    <!-- Contenedor centrado horizontalmente con ancho ajustado para landscape -->
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        android:padding="16dp">
+
+        <!-- Logo con tamaño reducido para ajustarse mejor en landscape -->
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/passworld_logo" />
+
+        <!-- Title con tamaño reducido -->
+        <TextView
+            android:id="@+id/vaultTitleLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/helveticaneue_bold"
+            android:text="@string/vault_unlock_title"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <!-- Description con tamaño reducido -->
+        <TextView
+            android:id="@+id/vaultTextLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="sans-serif"
+            android:padding="6dp"
+            android:text="@string/vault_unlock_description"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <!-- Master Password con tamaño ajustado -->
+        <EditText
+            android:id="@+id/masterPasswordField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/helvetica_neue_thin"
+            android:gravity="center"
+            android:hint="@string/vault_unlock_hint"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textSize="16sp" />
+
+        <!-- Error Label -->
+        <TextView
+            android:id="@+id/errorLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/vault_unlock_error"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:textAlignment="center" />
+
+        <!-- Unlock Button con ancho ajustado -->
+        <Button
+            android:id="@+id/unlockButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/buttonBackground"
+            android:fontFamily="@font/helveticaneue_bold"
+            android:text="@string/vault_unlock_button"
+            android:textColor="@color/buttonText"
+            android:textSize="16sp"
+            app:cornerRadius="10dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

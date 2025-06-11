@@ -38,7 +38,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    testImplementation(libs.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.jupiter)
+
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(platform(libs.firebase.bom))
@@ -48,6 +50,13 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.okhttp)
     implementation("commons-net:commons-net:3.8.0")
+    testImplementation("org.mockito:mockito-core:5.2.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.2.0")
+    testImplementation("net.bytebuddy:byte-buddy:1.14.7")
+    testImplementation("org.robolectric:robolectric:4.11.1")
+
+
 
 
 }

@@ -60,7 +60,9 @@
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
                 app:boxStrokeColor="@color/secondaryText"
-                app:hintTextColor="@color/secondaryText">
+                app:hintTextColor="@color/secondaryText"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/iconTint">
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -154,6 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="12dp"
+                android:fontFamily="@font/helveticaneue_light"
                 android:text="@string/or_sign_up_with"
                 android:textColor="?attr/colorSecondaryText"
                 android:textSize="14sp" />

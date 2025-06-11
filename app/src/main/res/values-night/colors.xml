@@ -34,6 +34,7 @@
     <color name="dialogBackground">#262626</color>
     <color name="checkIconTint">#000000</color>
     <color name="checkBoxBack">#808080</color>
+    <color name="strokeSecondaryButton">#787878</color>
 
 
     <!-- Colores de FORTALEZA -->

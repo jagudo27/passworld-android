@@ -18,7 +18,7 @@
     <string name="weak_password">Contraseña débil</string>
     <string name="duplicate_password">Contraseña duplicada</string>
     <string name="compromised_password">Contraseña comprometida</string>
-    <string name="unsafe_url">URL insegura</string>
+    <string name="unsafe_url">URL comprometida</string>
     <string name="security_issues_detected">Problemas detectados:\n%1$s</string>
     <string name="password_updated">Contraseña actualizada</string>
     <string name="error_updating">Error al actualizar: %1$s</string>
@@ -52,7 +52,7 @@
     <string name="signup_title">Registro</string>
     <string name="confirm_password">Confirmar Contraseña</string>
     <string name="register_button_text">Registrarse</string>
-    <string name="or_sign_up_with">- Registrarse con -</string>
+    <string name="or_sign_up_with">- - - - O Registrarse con - - - -</string>
     <string name="sign_up_already_have_account">¿Ya tienes una cuenta? Inicia sesión</string>
     <string name="sign_in_dont_have_account_question">¿No tienes una cuenta? Regístrate</string>
     <string name="dialog_establish_password_title">Establecer contraseña de la cuenta</string>
@@ -110,6 +110,8 @@
     <string name="aa_hint">Aa</string>
     <string name="_123_hint">123</string>
     <string name="symbols_hint">#@$!</string>
+    <string name="light_mode">Tema claro</string>
+    <string name="dark_mode">Tema oscuro</string>
 
 
 

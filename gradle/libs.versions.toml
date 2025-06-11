@@ -11,6 +11,8 @@ constraintlayout = "2.1.4"
 materialVersion = "1.9.0"
 okhttp = "4.9.3"
 playServicesAuth = "21.3.0"
+junitJupiter = "5.8.1"
+junitJunit = "4.12"
 
 [libraries]
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
@@ -26,6 +28,8 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 material-v190 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
