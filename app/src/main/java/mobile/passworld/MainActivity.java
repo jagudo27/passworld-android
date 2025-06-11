@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import mobile.passworld.activity.SignInActivity;
 import mobile.passworld.activity.VaultUnlockActivity;
-import mobile.passworld.session.UserSession;
+import mobile.passworld.data.session.UserSession;
 import mobile.passworld.utils.UserPreferences;
 
 public class MainActivity extends AppCompatActivity {

@@ -31,7 +31,7 @@ import mobile.passworld.activity.fragment.PasswordDetailDialogFragment;
 import mobile.passworld.activity.fragment.SavePasswordDialogFragment;
 import mobile.passworld.data.PasswordDTO;
 import mobile.passworld.data.PasswordRepository;
-import mobile.passworld.session.UserSession;
+import mobile.passworld.data.session.UserSession;
 import mobile.passworld.utils.PopupManager;
 
 public class PasswordListActivity extends AppCompatActivity {

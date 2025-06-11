@@ -47,7 +47,7 @@ public class GeneratePasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.generate_password);
+        setContentView(R.layout.activity_generate_password);
 
         // Inicializar vistas
         initViews();
@@ -117,7 +117,7 @@ public class GeneratePasswordActivity extends AppCompatActivity {
 
         // Actualizar indicador de fortaleza usando PasswordEvaluator
         int strength = PasswordEvaluator.calculateStrength(password);
-        PasswordEvaluator.updatePasswordStrengthInfo(strength, strengthIndicatorText, passwordStrengthBar);
+        PasswordEvaluator.updatePasswordStrengthInfo(strength, strengthIndicatorText, passwordStrengthBar, this);
 
         // Actualizar el texto del indicador adicional de fortaleza
         updateStrengthIndicatorText(strength);

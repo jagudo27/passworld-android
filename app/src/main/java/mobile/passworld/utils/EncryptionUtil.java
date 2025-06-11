@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-import mobile.passworld.exception.EncryptionException;
-import mobile.passworld.session.UserSession;
+import mobile.passworld.data.exception.EncryptionException;
+import mobile.passworld.data.session.UserSession;
 
 public class EncryptionUtil {
 
