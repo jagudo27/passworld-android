@@ -1,4 +1,4 @@
-package mobile.passworld.session;
+package mobile.passworld.data.session;
 
 
 import javax.crypto.spec.SecretKeySpec;

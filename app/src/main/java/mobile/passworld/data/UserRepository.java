@@ -7,8 +7,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import mobile.passworld.session.UserSession;
-
 public class UserRepository {
 
     public interface MasterPasswordCallback {

@@ -2,7 +2,6 @@ package mobile.passworld.activity;
 
 import static mobile.passworld.R.*;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,15 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import mobile.passworld.R;
 import mobile.passworld.data.UserRepository;
-import mobile.passworld.session.UserSession;
+import mobile.passworld.data.session.UserSession;
 import mobile.passworld.utils.EncryptionUtil;
 
 
