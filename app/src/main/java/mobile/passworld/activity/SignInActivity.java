@@ -27,7 +27,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Objects;
 
 import mobile.passworld.R;
-import mobile.passworld.session.UserSession;
+import mobile.passworld.data.session.UserSession;
+import mobile.passworld.utils.PasswordEvaluator;
 
 public class SignInActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
@@ -87,6 +88,9 @@ public class SignInActivity extends AppCompatActivity {
                 passwordEditText.setError(getString(R.string.required_password_field));
                 return;
             }
+            if (!PasswordEvaluator.isPasswordValid(this, password, passwordEditText)) {
+                return; // La contraseña no es válida, no continuar
+            }
             progressBar.setVisibility(View.VISIBLE);
             auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(SignInActivity.this, task -> {
@@ -96,15 +100,18 @@ public class SignInActivity extends AppCompatActivity {
                             startActivity(new Intent(SignInActivity.this, VaultUnlockActivity.class));
                             finish();
                         } else {
-                            Toast.makeText(SignInActivity.this, "Error de autenticación.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Inicio de sesión con Google fallido",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
         });
     }
 
     private void signInWithGoogle() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        googleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
     }
 
     @Override
@@ -141,4 +148,6 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }

@@ -1,6 +1,5 @@
 package mobile.passworld.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,20 +8,15 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,7 +24,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
@@ -43,9 +36,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Objects;
 
 import mobile.passworld.R;
-import mobile.passworld.exception.EncryptionException;
-import mobile.passworld.session.UserSession;
+import mobile.passworld.data.exception.EncryptionException;
+import mobile.passworld.data.session.UserSession;
 import mobile.passworld.utils.EncryptionUtil;
+import mobile.passworld.utils.PasswordEvaluator;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -124,6 +118,9 @@ public class SignUpActivity extends AppCompatActivity {
                 confirmPasswordEditText.setError(getString(R.string.passwords_dont_match));
                 return;
             }
+            if (!PasswordEvaluator.isPasswordValid(this, password, passwordEditText)) {
+                return; // La contraseña no es válida, no continuar
+            }
 
             // Registrar usuario sin contraseña maestra inicialmente
             registerUser(email, password);
@@ -189,8 +186,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signInWithGoogle() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        googleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
     }
 
     private static final int REQ_ONE_TAP = 2;  // Puede ser cualquier número entero
@@ -206,7 +205,7 @@ public class SignUpActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Error con Google SignIn: " + e.getMessage(),
+                Toast.makeText(this, "Registro con Google fallido",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -257,6 +256,22 @@ public class SignUpActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent); // Fondo transparente
         dialog.setCancelable(false);
         dialog.show();
+
+        // Ajustar el ancho del diálogo según el dispositivo
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        float density = getResources().getDisplayMetrics().density;
+        int dpWidth = (int) (screenWidth / density);
+
+        int width;
+        if (dpWidth >= 600) {
+            // Tablet: usar 60% del ancho de pantalla
+            width = (int) (screenWidth * 0.6);
+        } else {
+            // Móvil: usar 90% del ancho de pantalla
+            width = (int) (screenWidth * 0.9);
+        }
+
+        dialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         // Configurar el botón de guardar desde el layout
         savePasswordButton.setOnClickListener(v -> {
@@ -314,6 +329,21 @@ public class SignUpActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent); // Fondo transparente
         dialog.setCancelable(false);
         dialog.show();
+        // Ajustar el ancho del diálogo según el dispositivo
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        float density = getResources().getDisplayMetrics().density;
+        int dpWidth = (int) (screenWidth / density);
+
+        int width;
+        if (dpWidth >= 600) {
+            // Tablet: usar 60% del ancho de pantalla
+            width = (int) (screenWidth * 0.6);
+        } else {
+            // Móvil: usar 90% del ancho de pantalla
+            width = (int) (screenWidth * 0.9);
+        }
+
+        dialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         // Configurar el botón de guardar desde el layout
         saveLinkPasswordButton.setOnClickListener(v -> {
