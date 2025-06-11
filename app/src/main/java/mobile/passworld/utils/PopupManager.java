@@ -1,13 +1,17 @@
 package mobile.passworld.utils;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -19,8 +23,7 @@ import java.util.Locale;
 
 import mobile.passworld.R;
 import mobile.passworld.activity.SignInActivity;
-import mobile.passworld.data.PasswordRepository;
-import mobile.passworld.session.UserSession;
+import mobile.passworld.data.session.UserSession;
 
 public class PopupManager {
 
@@ -35,9 +38,20 @@ public class PopupManager {
         Context contextWrapper = new ContextThemeWrapper(activity, R.style.PopupMenu_PassworldAndroid);
         PopupMenu popupMenu = new PopupMenu(contextWrapper, anchor);
         popupMenu.getMenuInflater().inflate(R.menu.menu_options, popupMenu.getMenu());
-        
+
         // Mostrar opción de cerrar sesión solo si el usuario está autenticado
         popupMenu.getMenu().findItem(R.id.menu_logout).setVisible(isUserLoggedIn);
+
+        // Cambiar el texto del menú de modo oscuro/claro según el tema actual
+        int currentNightMode = activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
+
+        // Cambiar el título del menú según el modo actual
+        if (isDarkMode) {
+            popupMenu.getMenu().findItem(R.id.menu_dark_mode).setTitle(R.string.light_mode);
+        } else {
+            popupMenu.getMenu().findItem(R.id.menu_dark_mode).setTitle(R.string.dark_mode);
+        }
 
         popupMenu.setOnMenuItemClickListener(item -> {
             int itemId = item.getItemId();
@@ -54,6 +68,10 @@ public class PopupManager {
                 popupMenu.dismiss(); // Cerrar el menú explícitamente
                 logout(activity, callback);
                 return true;
+            } else if (itemId == R.id.menu_goto_help) {
+                popupMenu.dismiss();
+                openHelpPage(activity, callback);
+                return true; // Añadir return true para consistencia
             }
 
             return false;
@@ -181,6 +199,19 @@ public class PopupManager {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
         activity.finish();
+    }
+    public static void openHelpPage(Context context, MenuCallback callback) {
+        String url = "https://g4vr3.github.io/passworld-web/user-guide.html";
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(context, "No se pudo abrir la página de ayuda", Toast.LENGTH_SHORT).show();
+        }
+        if (callback != null) {
+            callback.onLogout(); // Llamar al callback si es necesario
+        }
     }
 }
 
